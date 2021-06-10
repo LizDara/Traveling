@@ -1,0 +1,66 @@
+import 'package:http/http.dart' as http;
+import 'package:traveling/src/models/user_model.dart';
+import 'package:traveling/src/preferences/user_preferences.dart';
+
+class UserProvider {
+  final String _url = '';
+  final _preferences = new UserPreferences();
+
+  Future<bool> register(User user) async {
+    final url = '$_url/';
+
+    final response = await http.post(url,
+        headers: {'Content-Type': 'application/json'}, body: userToJson(user));
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> login(User user) async {
+    final url = '$_url/';
+
+    final response = await http.post(url,
+        headers: {'Content-Type': 'application/json'}, body: userToJson(user));
+
+    if (response.statusCode == 200) {
+      _preferences.token = response.body.replaceAll(new RegExp(r'"'), '');
+      _preferences.lastPage = 'home';
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> update(int id, User user) async {
+    final url = '$_url/';
+
+    final response = await http.put(url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': '${_preferences.token}'
+        },
+        body: userToJson(user));
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> delete(int id) async {
+    final url = '$_url/';
+
+    final response = await http.delete(url, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': '${_preferences.token}'
+    });
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+}
