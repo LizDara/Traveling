@@ -3,11 +3,18 @@ import 'package:traveling/src/models/client_model.dart';
 import 'package:traveling/src/preferences/user_preferences.dart';
 
 class ClientProvider {
-  final String _url = 'http://localhost:8080';
+  final String _url = 'http://192.168.43.21:8080';
   final _preferences = new UserPreferences();
 
   Future<bool> register(Client client) async {
     final url = '$_url/registrar-cliente/';
+    print(client.nombres +
+        client.apellidos +
+        client.ci.toString() +
+        client.fechaNacimiento +
+        client.correoElectronico +
+        client.sexo +
+        client.contrasena);
 
     final response = await http.post(url,
         headers: {'Content-Type': 'application/json'},

@@ -6,10 +6,8 @@ class TicketPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[Background(), Detail()],
-        ),
+      body: Stack(
+        children: <Widget>[Background(), Detail()],
       ),
     );
   }
@@ -26,7 +24,7 @@ class Background extends StatelessWidget {
       children: <Widget>[
         _createBackground(),
         Container(
-          margin: EdgeInsets.fromLTRB(25, 20, 25, 25),
+          margin: EdgeInsets.fromLTRB(25, 40, 25, 25),
           child: Column(
             children: <Widget>[
               _createImage(),
@@ -146,7 +144,7 @@ class _DetailState extends State<Detail> {
         child: Column(
           children: <Widget>[
             SizedBox(
-              height: MediaQuery.of(context).size.height * 2 / 9,
+              height: MediaQuery.of(context).size.height * 2 / 7,
             ),
             TicketDetails(),
             SizedBox(
@@ -177,7 +175,7 @@ class _DetailState extends State<Detail> {
                   borderRadius: BorderRadius.circular(8)),
               color: Color.fromRGBO(6, 6, 6, 1),
               textColor: Colors.white,
-              onPressed: () => Navigator.pushNamed(context, 'home')),
+              onPressed: () => Navigator.pushReplacementNamed(context, 'main')),
         )),
       ],
     );

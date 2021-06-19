@@ -9,15 +9,12 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            Background(),
-            Details(),
-          ],
-        ),
+      body: Stack(
+        children: <Widget>[
+          Background(),
+          Details(),
+        ],
       ),
-      bottomNavigationBar: NavigationBar(),
     );
   }
 }
@@ -90,7 +87,7 @@ class Details extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+        padding: EdgeInsets.symmetric(vertical: 40, horizontal: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
@@ -316,67 +313,6 @@ class ReservationSwiper extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class NavigationBar extends StatelessWidget {
-  const NavigationBar({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      backgroundColor: Color.fromRGBO(149, 86, 135, 0.7),
-      selectedItemColor: Colors.white70,
-      showUnselectedLabels: false,
-      onTap: (value) {
-        if (value == 1) {
-          Navigator.pushNamed(context, 'reservation');
-        }
-        if (value == 2) {
-          Navigator.pushNamed(context, '');
-        }
-      },
-      type: BottomNavigationBarType.fixed,
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          title: Text(
-            'Home',
-            style: TextStyle(fontSize: 10),
-          ),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.search),
-          title: Text(
-            'Search',
-            style: TextStyle(fontSize: 10),
-          ),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.notifications),
-          title: Text(
-            'Notify',
-            style: TextStyle(fontSize: 10),
-          ),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.confirmation_number),
-          title: Text(
-            'Tickets',
-            style: TextStyle(fontSize: 10),
-          ),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          title: Text(
-            'Profile',
-            style: TextStyle(fontSize: 10),
-          ),
-        ),
-      ],
     );
   }
 }

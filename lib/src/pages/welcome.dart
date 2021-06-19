@@ -8,22 +8,19 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        bottom: false,
-        child: Container(
-          margin: EdgeInsets.symmetric(vertical: 25, horizontal: 26),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Welcome(),
-              SizedBox(
-                height: 25,
-              ),
-              GetStarted(
-                preferences: preferences,
-              )
-            ],
-          ),
+      body: Container(
+        margin: EdgeInsets.symmetric(vertical: 40, horizontal: 26),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Welcome(),
+            SizedBox(
+              height: 25,
+            ),
+            GetStarted(
+              preferences: preferences,
+            )
+          ],
         ),
       ),
     );
@@ -126,8 +123,6 @@ class GetStarted extends StatelessWidget {
 
   Widget _createButton(BuildContext context) {
     return RaisedButton(
-      /*onPressed: () =>
-          Navigator.pushReplacementNamed(context, preferences.lastPage),*/
       onPressed: () =>
           Navigator.pushReplacementNamed(context, preferences.lastPage),
       child: Text(

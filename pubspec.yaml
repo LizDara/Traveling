@@ -35,6 +35,7 @@ dependencies:
   mime_type:
   shared_preferences:
   flutter_swiper: ^1.1.6
+  animations: ^1.1.2
 
 dev_dependencies:
   flutter_test:

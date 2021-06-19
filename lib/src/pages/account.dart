@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:traveling/src/blocs/provider.dart';
 import 'package:traveling/src/models/client_model.dart';
 import 'package:traveling/src/providers/ClientProvider.dart';
 
-class SignUpPage extends StatefulWidget {
+class AccountPage extends StatefulWidget {
+  const AccountPage({Key key}) : super(key: key);
+
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  _AccountPageState createState() => _AccountPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _AccountPageState extends State<AccountPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -18,7 +19,7 @@ class _SignUpPageState extends State<SignUpPage> {
       body: Stack(
         children: <Widget>[
           Background(),
-          FormSignUp(),
+          FormEdit(),
         ],
       ),
     );
@@ -75,16 +76,16 @@ class Background extends StatelessWidget {
   }
 }
 
-class FormSignUp extends StatefulWidget {
-  const FormSignUp({
+class FormEdit extends StatefulWidget {
+  const FormEdit({
     Key key,
   }) : super(key: key);
 
   @override
-  _FormSignUpState createState() => _FormSignUpState();
+  _FormEditState createState() => _FormEditState();
 }
 
-class _FormSignUpState extends State<FormSignUp> {
+class _FormEditState extends State<FormEdit> {
   Client client = new Client();
   ClientProvider clientProvider = new ClientProvider();
 
@@ -97,8 +98,6 @@ class _FormSignUpState extends State<FormSignUp> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = Provider.of(context);
-
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -137,20 +136,10 @@ class _FormSignUpState extends State<FormSignUp> {
                   _createNit(),
                   SizedBox(height: 15),
                   _createNitName(),
-                  SizedBox(height: 15),
-                  _createEmail(bloc),
-                  SizedBox(height: 15),
-                  _createPassword(bloc),
-                  SizedBox(height: 15),
-                  _createConfirmPassword(bloc),
                   SizedBox(
                     height: 20,
                   ),
-                  _createSignUpButton(context, bloc),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  _createSignInText(context)
+                  _createEditButton(context),
                 ],
               ),
             ),
@@ -164,7 +153,7 @@ class _FormSignUpState extends State<FormSignUp> {
     return Column(
       children: <Widget>[
         Text(
-          'Create',
+          'Edit',
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
         Text(
@@ -339,59 +328,7 @@ class _FormSignUpState extends State<FormSignUp> {
     );
   }
 
-  Widget _createEmail(LoginBloc bloc) {
-    return StreamBuilder(
-        stream: bloc.emailStream,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return TextFormField(
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-                labelText: 'Email',
-                hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
-                errorText: snapshot.error),
-            onChanged: bloc.emailSink,
-            onSaved: (value) => client.correoElectronico = value,
-          );
-        });
-  }
-
-  Widget _createPassword(LoginBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.passwordStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return TextFormField(
-          keyboardType: TextInputType.emailAddress,
-          obscureText: true,
-          decoration: InputDecoration(
-              labelText: 'Password',
-              hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
-              errorText: snapshot.error),
-          onChanged: bloc.passwordSink,
-          onSaved: (value) => client.contrasena = value,
-        );
-      },
-    );
-  }
-
-  Widget _createConfirmPassword(LoginBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.passwordStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return TextFormField(
-          keyboardType: TextInputType.emailAddress,
-          obscureText: true,
-          decoration: InputDecoration(
-              labelText: 'Confirm Password',
-              hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
-              errorText: snapshot.error),
-          //onChanged: bloc.passwordSink,
-          //onSaved: (value) => client.contrasena = value,
-        );
-      },
-    );
-  }
-
-  Widget _createSignUpButton(BuildContext context, LoginBloc bloc) {
+  Widget _createEditButton(BuildContext context) {
     return Row(
       children: <Widget>[
         Expanded(
@@ -399,7 +336,7 @@ class _FormSignUpState extends State<FormSignUp> {
             child: RaisedButton(
               padding: EdgeInsets.symmetric(vertical: 14),
               child: Text(
-                'SIGN UP',
+                'SAVE',
                 style: TextStyle(fontSize: 16),
               ),
               shape: RoundedRectangleBorder(
@@ -407,9 +344,9 @@ class _FormSignUpState extends State<FormSignUp> {
               color: Color.fromRGBO(6, 6, 6, 1),
               textColor: Colors.white,
               onPressed: () {
-                if (!formKey.currentState.validate()) return;
-                formKey.currentState.save();
-                _register(context, bloc);
+                //if (!formKey.currentState.validate()) return;
+                //formKey.currentState.save();
+                _edit(context);
               },
             ),
           ),
@@ -418,32 +355,7 @@ class _FormSignUpState extends State<FormSignUp> {
     );
   }
 
-  Widget _createSignInText(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          "Already have an account?",
-          style: TextStyle(fontSize: 15),
-        ),
-        FlatButton(
-          onPressed: () => Navigator.pushReplacementNamed(context, 'signin'),
-          child: Text(
-            'Sign in',
-            style:
-                TextStyle(fontSize: 15, decoration: TextDecoration.underline),
-          ),
-        )
-      ],
-    );
-  }
-
-  _register(BuildContext context, LoginBloc bloc) async {
-    final resultRegister = await clientProvider.register(client);
-    if (resultRegister) {
-      Navigator.pushReplacementNamed(context, 'main');
-    } else {
-      print("ERROR!!");
-    }
+  _edit(BuildContext context) {
+    Navigator.pushReplacementNamed(context, 'main');
   }
 }

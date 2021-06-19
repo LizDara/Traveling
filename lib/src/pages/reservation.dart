@@ -11,12 +11,9 @@ class _ReservationPageState extends State<ReservationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Color.fromRGBO(246, 247, 249, 1),
-      body: SafeArea(
-          bottom: false,
-          child: Stack(
-            children: <Widget>[Background(), FormReservation()],
-          )),
+      body: Stack(
+        children: <Widget>[Background(), FormReservation()],
+      ),
     );
   }
 }
@@ -54,7 +51,6 @@ class Background extends StatelessWidget {
 
   Container _createImage() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
       child: Image(
         image: AssetImage('assets/ticket.png'),
         fit: BoxFit.cover,
@@ -77,7 +73,7 @@ class _FormReservationState extends State<FormReservation> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+        margin: EdgeInsets.symmetric(horizontal: 25),
         child: Form(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

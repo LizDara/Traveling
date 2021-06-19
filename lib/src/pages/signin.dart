@@ -7,14 +7,11 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        bottom: false,
-        child: Stack(
-          children: <Widget>[
-            Background(),
-            FormSignIn(),
-          ],
-        ),
+      body: Stack(
+        children: <Widget>[
+          Background(),
+          FormSignIn(),
+        ],
       ),
     );
   }
@@ -28,23 +25,44 @@ class Background extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: <Widget>[
-        Positioned(
-            left: -85, top: -75, child: _createCircle(220, 210, 155, 134, 0.9)),
-        Positioned(
-            left: 40, top: -120, child: _createCircle(210, 135, 134, 210, 0.9))
-      ],
+      children: <Widget>[_createBackground(), _createIcon(context)],
     );
   }
 
-  Widget _createCircle(double size, int r, int g, int b, double opacity) {
+  Widget _createBackground() {
     return Container(
-      height: size,
-      width: size,
+      width: double.infinity,
+      height: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(180),
-        color: Color.fromRGBO(r, g, b, opacity),
+        gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color.fromRGBO(89, 72, 119, 1),
+              Color.fromRGBO(149, 86, 135, 1)
+            ]),
       ),
+    );
+  }
+
+  Widget _createIcon(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          width: size.width * 5 / 9,
+          height: size.height * 2 / 7,
+          padding: EdgeInsets.all(28),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(140)),
+              color: Colors.white60),
+          child: Image(
+            image: AssetImage('assets/user.png'),
+            fit: BoxFit.contain,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -59,37 +77,43 @@ class FormSignIn extends StatelessWidget {
     final bloc = Provider.of(context);
 
     return SingleChildScrollView(
-      child: Container(
-          margin: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 4,
-              ),
-              _createTitle(),
-              SizedBox(
-                height: 20,
-              ),
-              _createEmail(bloc),
-              SizedBox(height: 20),
-              _createPassword(bloc),
-              SizedBox(
-                height: 30,
-              ),
-              _createSignInButton(bloc),
-              SizedBox(
-                height: 10,
-              ),
-              _createSignUpText(context)
-            ],
-          )),
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 2 / 7,
+          ),
+          _createTitle(),
+          SizedBox(
+            height: 14,
+          ),
+          Container(
+              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+              decoration: BoxDecoration(
+                  color: Colors.white70,
+                  borderRadius: BorderRadius.circular(18)),
+              child: Column(
+                children: <Widget>[
+                  _createEmail(bloc),
+                  SizedBox(height: 20),
+                  _createPassword(bloc),
+                  SizedBox(
+                    height: 36,
+                  ),
+                  _createSignInButton(bloc),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  _createSignUpText(context)
+                ],
+              )),
+        ],
+      ),
     );
   }
 
   Widget _createTitle() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
           'Welcome back,',
@@ -113,9 +137,9 @@ class FormSignIn extends StatelessWidget {
           return TextField(
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-                labelText: 'Email',
-                hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
-                border: OutlineInputBorder()),
+              labelText: 'Email',
+              hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
+            ),
             onChanged: bloc.emailSink,
           );
         });
@@ -129,9 +153,9 @@ class FormSignIn extends StatelessWidget {
             keyboardType: TextInputType.text,
             obscureText: true,
             decoration: InputDecoration(
-                labelText: 'Password',
-                hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
-                border: OutlineInputBorder()),
+              labelText: 'Password',
+              hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
+            ),
             onChanged: bloc.passwordSink,
           );
         });
@@ -166,7 +190,7 @@ class FormSignIn extends StatelessWidget {
   }
 
   _login(LoginBloc bloc, BuildContext context) {
-    Navigator.pushReplacementNamed(context, 'home');
+    Navigator.pushReplacementNamed(context, 'main');
   }
 
   Widget _createSignUpText(BuildContext context) {

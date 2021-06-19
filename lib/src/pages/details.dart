@@ -14,10 +14,8 @@ class _DetailsPageState extends State<DetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[Background(), FormDetail()],
-        ),
+      body: Stack(
+        children: <Widget>[Background(), FormDetail()],
       ),
     );
   }
@@ -34,7 +32,7 @@ class Background extends StatelessWidget {
       children: <Widget>[
         _createBackground(),
         Container(
-          margin: EdgeInsets.fromLTRB(25, 20, 25, 25),
+          margin: EdgeInsets.fromLTRB(25, 40, 25, 25),
           child: Column(
             children: <Widget>[
               _createImage(),
@@ -150,13 +148,13 @@ class _FormDetailState extends State<FormDetail> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+        margin: EdgeInsets.symmetric(horizontal: 25),
         child: Form(
           key: formKey,
           child: Column(
             children: <Widget>[
               SizedBox(
-                height: MediaQuery.of(context).size.height * 2 / 9,
+                height: MediaQuery.of(context).size.height * 2 / 7,
               ),
               FlightDetails(),
               SizedBox(
