@@ -1,8 +1,10 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling/src/pages/home.dart';
+import 'package:traveling/src/pages/notifications.dart';
 import 'package:traveling/src/pages/profile.dart';
 import 'package:traveling/src/pages/search.dart';
+import 'package:traveling/src/pages/travels.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({Key key}) : super(key: key);
@@ -16,8 +18,8 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> pageList = <Widget>[
     HomePage(),
     SearchPage(),
-    SearchPage(),
-    SearchPage(),
+    NotificationsPage(),
+    TravelsPage(),
     ProfilePage()
   ];
   @override

@@ -47,7 +47,8 @@ class Details extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
-  final List<Offer> offers = [
+  final List<Offer> offers = new List();
+  /*[
     new Offer(
         city: 'Dubai',
         price: '128',
@@ -60,10 +61,13 @@ class Details extends StatelessWidget {
         hour: '11:35',
         date: 'Feb 02',
         image: 'assets/venice.png')
-  ];
+  ];*/
 
-  final List<Reservation> reservations = [
+  final List<Reservation> reservations = new List();
+  /*[
     new Reservation(
+        from: 'Botswana',
+        to: 'Bermudas',
         departure: 'TBS',
         destination: 'BER',
         time: '3h 40m',
@@ -71,8 +75,12 @@ class Details extends StatelessWidget {
         destinationDate: 'Jan 30',
         departureHour: '20:00',
         destinationHour: '01:00',
-        price: '226'),
+        price: '226',
+        flight: 'KC89',
+        typeClass: 'Business'),
     new Reservation(
+        from: 'Dhaka',
+        to: 'Singapore',
         departure: 'DHK',
         destination: 'SIN',
         time: '6h 10m',
@@ -80,8 +88,10 @@ class Details extends StatelessWidget {
         destinationDate: 'Mar 27',
         departureHour: '19:45',
         destinationHour: '01:55',
-        price: '695')
-  ];
+        price: '695',
+        flight: 'CK88',
+        typeClass: 'Business')
+  ];*/
 
   @override
   Widget build(BuildContext context) {
@@ -114,64 +124,75 @@ class OfferSwiper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Swiper(
-      itemWidth: MediaQuery.of(context).size.width * 2 / 3,
-      itemHeight: MediaQuery.of(context).size.height * 2 / 5,
-      itemCount: offers.length,
-      pagination: new SwiperPagination(),
-      layout: SwiperLayout.STACK,
-      itemBuilder: (BuildContext context, int index) {
-        return ClipRRect(
-            borderRadius: BorderRadius.circular(30),
-            child: Container(
-              color: Colors.white,
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    child: Image.asset(offers[index].image),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+    return (offers.length == 0)
+        ? Container(
+            width: MediaQuery.of(context).size.width * 2 / 3,
+            height: MediaQuery.of(context).size.height * 2 / 5,
+            child: Center(
+              child: Text(
+                'No offers.',
+                style: TextStyle(color: Colors.black54, fontSize: 16),
+              ),
+            ),
+          )
+        : Swiper(
+            itemWidth: MediaQuery.of(context).size.width * 2 / 3,
+            itemHeight: MediaQuery.of(context).size.height * 2 / 5,
+            itemCount: offers.length,
+            pagination: new SwiperPagination(),
+            layout: SwiperLayout.STACK,
+            itemBuilder: (BuildContext context, int index) {
+              return ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    color: Colors.white,
+                    child: Stack(
                       children: <Widget>[
-                        Text(
-                          'Offer',
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.orange,
-                              fontWeight: FontWeight.w500),
+                        Container(
+                          alignment: Alignment.bottomCenter,
+                          child: Image.asset(offers[index].image),
                         ),
-                        Text(
-                          offers[index].city,
-                          style: TextStyle(
-                              fontSize: 22,
-                              color: Color.fromRGBO(6, 6, 6, 1),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          r'From $ ' + offers[index].price,
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Color.fromRGBO(6, 6, 6, 1),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          offers[index].hour + ' ' + offers[index].date,
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color.fromRGBO(6, 6, 6, 0.2),
-                              fontWeight: FontWeight.bold),
-                        ),
+                        Container(
+                          padding: EdgeInsets.all(24),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Offer',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.orange,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              Text(
+                                offers[index].city,
+                                style: TextStyle(
+                                    fontSize: 22,
+                                    color: Color.fromRGBO(6, 6, 6, 1),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                r'From $ ' + offers[index].price,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Color.fromRGBO(6, 6, 6, 1),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                offers[index].hour + ' ' + offers[index].date,
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color.fromRGBO(6, 6, 6, 0.2),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
-                  )
-                ],
-              ),
-            ));
-      },
-    );
+                  ));
+            },
+          );
   }
 }
 
@@ -182,26 +203,35 @@ class ReservationSwiper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Swiper(
-      itemWidth: MediaQuery.of(context).size.width * 7 / 8,
-      itemHeight: MediaQuery.of(context).size.height * 4 / 11,
-      itemCount: reservations.length,
-      pagination: new SwiperPagination(),
-      layout: SwiperLayout.CUSTOM,
-      customLayoutOption: new CustomLayoutOption(startIndex: -1, stateCount: 3)
-          .addRotate([-45.0 / 180, 0.0, 45.0 / 180]).addTranslate([
-        new Offset(-370.0, -40.0),
-        new Offset(0.0, 0.0),
-        new Offset(370.0, -40.0)
-      ]),
-      itemBuilder: (BuildContext context, int index) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(30),
-          child: Container(
-            color: Colors.white,
-            child: Stack(
-              children: <Widget>[
-                Container(
+    return (reservations.length == 0)
+        ? Container(
+            width: MediaQuery.of(context).size.width * 7 / 8,
+            height: MediaQuery.of(context).size.height * 4 / 11,
+            child: Center(
+              child: Text(
+                'No pending flights.',
+                style: TextStyle(color: Colors.black54, fontSize: 16),
+              ),
+            ),
+          )
+        : Swiper(
+            itemWidth: MediaQuery.of(context).size.width * 7 / 8,
+            itemHeight: MediaQuery.of(context).size.height * 4 / 11,
+            itemCount: reservations.length,
+            pagination: new SwiperPagination(),
+            layout: SwiperLayout.CUSTOM,
+            customLayoutOption:
+                new CustomLayoutOption(startIndex: -1, stateCount: 3)
+                    .addRotate([-45.0 / 180, 0.0, 45.0 / 180]).addTranslate([
+              new Offset(-370.0, -40.0),
+              new Offset(0.0, 0.0),
+              new Offset(370.0, -40.0)
+            ]),
+            itemBuilder: (BuildContext context, int index) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: Container(
+                  color: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 22, vertical: 28),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,6 +258,7 @@ class ReservationSwiper extends StatelessWidget {
                                 Image(
                                   image: AssetImage('assets/flight_light.png'),
                                   fit: BoxFit.fill,
+                                  color: Colors.black26,
                                 ),
                                 Text(
                                   reservations[index].time,
@@ -288,7 +319,8 @@ class ReservationSwiper extends StatelessWidget {
                           ),
                           IconButton(
                               icon: Icon(Icons.keyboard_arrow_down),
-                              onPressed: () {}),
+                              onPressed: () =>
+                                  Navigator.pushNamed(context, 'ticket')),
                           Expanded(child: Container()),
                           Container(
                             padding: EdgeInsets.symmetric(
@@ -307,12 +339,9 @@ class ReservationSwiper extends StatelessWidget {
                       )
                     ],
                   ),
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
+                ),
+              );
+            },
+          );
   }
 }

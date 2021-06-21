@@ -50,19 +50,19 @@ class FormButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 50, bottom: 20, left: 25, right: 18),
+      margin: EdgeInsets.only(top: 60, bottom: 20, left: 25, right: 14),
       child: Column(
         children: <Widget>[
           _createInformation(),
           SizedBox(
-            height: 14,
+            height: 20,
           ),
           _createEditProfileButton(context),
           _createChangePasswordButton(context),
           _createLine(),
           _createLogoutButton(context),
-          Expanded(child: Container()),
-          _createImage(context)
+          //Expanded(child: Container()),
+          //_createImage(context)
         ],
       ),
     );
@@ -105,18 +105,18 @@ class FormButton extends StatelessWidget {
   Widget _createEditProfileButton(BuildContext context) {
     return Row(
       children: <Widget>[
-        Icon(Icons.edit, size: 30, color: Colors.black54),
+        Icon(Icons.edit, size: 30, color: Colors.black87),
         SizedBox(
           width: 14,
         ),
         Text(
           'Edit profile',
-          style: TextStyle(fontSize: 16, color: Colors.black54),
+          style: TextStyle(fontSize: 16, color: Colors.black87),
         ),
         Expanded(child: Container()),
         IconButton(
             icon:
-                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black54),
+                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black87),
             onPressed: () => Navigator.pushNamed(context, 'account'))
       ],
     );
@@ -125,18 +125,18 @@ class FormButton extends StatelessWidget {
   Widget _createChangePasswordButton(BuildContext context) {
     return Row(
       children: <Widget>[
-        Icon(Icons.lock_outline, size: 30, color: Colors.black54),
+        Icon(Icons.lock_outline, size: 30, color: Colors.black87),
         SizedBox(
           width: 14,
         ),
         Text(
           'Change password',
-          style: TextStyle(fontSize: 16, color: Colors.black54),
+          style: TextStyle(fontSize: 16, color: Colors.black87),
         ),
         Expanded(child: Container()),
         IconButton(
             icon:
-                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black54),
+                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black87),
             onPressed: () => Navigator.pushNamed(context, 'password'))
       ],
     );
@@ -148,8 +148,8 @@ class FormButton extends StatelessWidget {
         Expanded(
             child: Container(
           margin: EdgeInsets.only(top: 20, bottom: 20, left: 4, right: 18),
-          height: 2,
-          color: Colors.black54,
+          height: 1.5,
+          color: Colors.black87,
         )),
       ],
     );
@@ -158,18 +158,18 @@ class FormButton extends StatelessWidget {
   Widget _createLogoutButton(BuildContext context) {
     return Row(
       children: <Widget>[
-        Icon(Icons.exit_to_app, size: 30, color: Colors.black54),
+        Icon(Icons.exit_to_app, size: 30, color: Colors.black87),
         SizedBox(
           width: 14,
         ),
         Text(
           'Log out',
-          style: TextStyle(fontSize: 16, color: Colors.black54),
+          style: TextStyle(fontSize: 16, color: Colors.black87),
         ),
         Expanded(child: Container()),
         IconButton(
             icon:
-                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black54),
+                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black87),
             onPressed: () => Navigator.pushReplacementNamed(context, 'welcome'))
       ],
     );

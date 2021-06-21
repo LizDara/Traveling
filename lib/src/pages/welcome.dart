@@ -8,20 +8,48 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        margin: EdgeInsets.symmetric(vertical: 40, horizontal: 26),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Welcome(),
-            SizedBox(
-              height: 25,
+      body: Stack(
+        children: <Widget>[
+          Background(),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 40, horizontal: 26),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Welcome(),
+                SizedBox(
+                  height: 25,
+                ),
+                GetStarted(
+                  preferences: preferences,
+                )
+              ],
             ),
-            GetStarted(
-              preferences: preferences,
-            )
-          ],
-        ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Background extends StatelessWidget {
+  const Background({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color.fromRGBO(89, 72, 119, 1),
+              Color.fromRGBO(149, 86, 135, 1)
+            ]),
       ),
     );
   }
@@ -39,12 +67,12 @@ class Welcome extends StatelessWidget {
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Color.fromRGBO(135, 134, 210, 0.3),
+        color: Colors.white70,
       ),
       child: Stack(
         children: <Widget>[
           Text(
-            'Fly anywhere in the world with the Line mobile app.',
+            'Fly anywhere in the world with the Volad Tours mobile app.',
             style: TextStyle(fontSize: 17),
           ),
           Positioned(
