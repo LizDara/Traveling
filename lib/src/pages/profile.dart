@@ -4,13 +4,18 @@ import 'package:traveling/src/preferences/user_preferences.dart';
 import 'package:traveling/src/providers/UserProvider.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key key}) : super(key: key);
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        children: <Widget>[Background(), FormButton()],
+        children: <Widget>[
+          Background(),
+          FormButton(
+            scaffoldKey: scaffoldKey,
+          )
+        ],
       ),
     );
   }
