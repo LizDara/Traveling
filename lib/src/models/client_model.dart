@@ -18,6 +18,8 @@ class Client {
     this.nombreNit,
     this.correoElectronico,
     this.contrasena,
+    this.accessToken,
+    this.refreshToken,
   });
 
   int ci;
@@ -32,6 +34,8 @@ class Client {
   String nombreNit;
   String correoElectronico;
   String contrasena;
+  String accessToken;
+  String refreshToken;
 
   factory Client.fromJson(Map<String, dynamic> json) => Client(
         ci: json["ci"],
@@ -46,6 +50,8 @@ class Client {
         nombreNit: json["nombre_nit"],
         correoElectronico: json["correo_electronico"],
         contrasena: json["contrasena"],
+        accessToken: json["access_token"],
+        refreshToken: json["refresh_token"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -61,5 +67,7 @@ class Client {
         "nombre_nit": nombreNit,
         "correo_electronico": correoElectronico,
         "contrasena": contrasena,
+        "access_token": accessToken,
+        "refresh_token": refreshToken,
       };
 }

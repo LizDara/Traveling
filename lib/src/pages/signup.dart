@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:traveling/src/blocs/provider.dart';
 import 'package:traveling/src/models/client_model.dart';
+import 'package:traveling/src/models/user_model.dart';
 import 'package:traveling/src/providers/ClientProvider.dart';
+import 'package:traveling/src/providers/UserProvider.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -18,7 +20,9 @@ class _SignUpPageState extends State<SignUpPage> {
       body: Stack(
         children: <Widget>[
           Background(),
-          FormSignUp(),
+          FormSignUp(
+            scaffoldKey: scaffoldKey,
+          ),
         ],
       ),
     );
@@ -76,20 +80,21 @@ class Background extends StatelessWidget {
 }
 
 class FormSignUp extends StatefulWidget {
-  const FormSignUp({
-    Key key,
-  }) : super(key: key);
-
+  const FormSignUp({Key key, @required this.scaffoldKey}) : super(key: key);
+  final scaffoldKey;
   @override
   _FormSignUpState createState() => _FormSignUpState();
 }
 
 class _FormSignUpState extends State<FormSignUp> {
   Client client = new Client();
+  User user = new User();
   ClientProvider clientProvider = new ClientProvider();
+  UserProvider userProvider = new UserProvider();
 
   String _dateOfBirth = '';
   bool _gender = true;
+  String _confirmPassword = '';
 
   TextEditingController _dateController = new TextEditingController();
 
@@ -237,8 +242,8 @@ class _FormSignUpState extends State<FormSignUp> {
         lastDate: new DateTime(now.year - 10));
     if (picked != null) {
       _dateOfBirth = picked.toString().substring(0, 10);
-      _dateController.text = _dateOfBirth;
-      client.fechaNacimiento = picked.toString().substring(0, 10);
+      _dateController.text = _dateOfBirth.replaceAll(new RegExp(r'-'), '/');
+      client.fechaNacimiento = _dateOfBirth.replaceAll(new RegExp(r'-'), '/');
     }
   }
 
@@ -374,47 +379,49 @@ class _FormSignUpState extends State<FormSignUp> {
   }
 
   Widget _createConfirmPassword(LoginBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.passwordStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return TextFormField(
-          keyboardType: TextInputType.emailAddress,
-          obscureText: true,
-          decoration: InputDecoration(
-              labelText: 'Confirm Password',
-              hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
-              errorText: snapshot.error),
-          //onChanged: bloc.passwordSink,
-          //onSaved: (value) => client.contrasena = value,
-        );
-      },
+    return TextFormField(
+      keyboardType: TextInputType.emailAddress,
+      obscureText: true,
+      decoration: InputDecoration(
+        labelText: 'Confirm Password',
+        hintStyle: TextStyle(
+          color: Color.fromRGBO(6, 6, 6, 1),
+        ),
+      ),
+      onSaved: (value) => _confirmPassword = value,
     );
   }
 
   Widget _createSignUpButton(BuildContext context, LoginBloc bloc) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: Container(
-            child: RaisedButton(
-              padding: EdgeInsets.symmetric(vertical: 14),
-              child: Text(
-                'SIGN UP',
-                style: TextStyle(fontSize: 16),
+    return StreamBuilder(
+      stream: bloc.formValidStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Row(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                child: RaisedButton(
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  child: Text(
+                    'SIGN UP',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  color: Color.fromRGBO(6, 6, 6, 1),
+                  textColor: Colors.white,
+                  onPressed: () {
+                    if (!formKey.currentState.validate()) return;
+                    if (!snapshot.hasData) return;
+                    formKey.currentState.save();
+                    _register(context);
+                  },
+                ),
               ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-              color: Color.fromRGBO(6, 6, 6, 1),
-              textColor: Colors.white,
-              onPressed: () {
-                if (!formKey.currentState.validate()) return;
-                formKey.currentState.save();
-                _register(context, bloc);
-              },
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 
@@ -438,12 +445,36 @@ class _FormSignUpState extends State<FormSignUp> {
     );
   }
 
-  _register(BuildContext context, LoginBloc bloc) async {
-    final resultRegister = await clientProvider.register(client);
-    if (resultRegister) {
-      Navigator.pushReplacementNamed(context, 'main');
+  _register(BuildContext context) async {
+    if (_confirmPassword == client.contrasena) {
+      print(client.nombres);
+      print(client.fechaNacimiento);
+      print(client.correoElectronico);
+      print(client.contrasena);
+      final resultRegister = await clientProvider.register(client);
+      if (resultRegister) {
+        user.correoElectronico = client.correoElectronico;
+        user.contrasena = client.contrasena;
+        final resultLogin = await userProvider.login(user);
+        if (resultLogin) {
+          Navigator.pushReplacementNamed(context, 'main');
+        } else {
+          Navigator.pushReplacementNamed(context, 'signin');
+        }
+      } else {
+        _showMessage(
+            'No se pudo registrar el usuario. Inténtelo nuevamente por favor.');
+      }
     } else {
-      print("ERROR!!");
+      _showMessage('Las contraseñas no coinciden. Favor de verificar.');
     }
+  }
+
+  _showMessage(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      duration: Duration(milliseconds: 1500),
+    );
+    widget.scaffoldKey.currentState.showSnackBar(snackBar);
   }
 }

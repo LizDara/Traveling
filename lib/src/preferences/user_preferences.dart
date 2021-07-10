@@ -15,12 +15,20 @@ class UserPreferences {
     this._preferences = await SharedPreferences.getInstance();
   }
 
-  get token {
+  get accessToken {
     return _preferences.getString('token') ?? '';
   }
 
-  set token(String token) {
-    _preferences.setString('token', token);
+  set accessToken(String accessToken) {
+    _preferences.setString('token', accessToken);
+  }
+
+  get refreshToken {
+    return _preferences.getString('token') ?? '';
+  }
+
+  set refreshToken(String refreshToken) {
+    _preferences.setString('token', refreshToken);
   }
 
   get lastPage {

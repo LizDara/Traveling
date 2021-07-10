@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:traveling/src/blocs/provider.dart';
+import 'package:traveling/src/models/user_model.dart';
+import 'package:traveling/src/providers/UserProvider.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({Key key}) : super(key: key);
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       body: Stack(
         children: <Widget>[
           Background(),
-          FormSignIn(),
+          FormSignIn(scaffoldKey),
         ],
       ),
     );
@@ -67,10 +70,18 @@ class Background extends StatelessWidget {
   }
 }
 
-class FormSignIn extends StatelessWidget {
-  const FormSignIn({
-    Key key,
-  }) : super(key: key);
+class FormSignIn extends StatefulWidget {
+  FormSignIn(this.scaffoldKey);
+  final scaffoldKey;
+
+  @override
+  _FormSignInState createState() => _FormSignInState();
+}
+
+class _FormSignInState extends State<FormSignIn> {
+  User user = new User();
+
+  UserProvider userProvider = new UserProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -189,8 +200,15 @@ class FormSignIn extends StatelessWidget {
     );
   }
 
-  _login(LoginBloc bloc, BuildContext context) {
-    Navigator.pushReplacementNamed(context, 'main');
+  _login(LoginBloc bloc, BuildContext context) async {
+    user.correoElectronico = bloc.email;
+    user.contrasena = bloc.password;
+    final resultLogin = await userProvider.login(user);
+    if (resultLogin) {
+      Navigator.pushReplacementNamed(context, 'main');
+    } else {
+      _showMessage('Correo o contraseña incorrectos.');
+    }
   }
 
   Widget _createSignUpText(BuildContext context) {
@@ -211,5 +229,13 @@ class FormSignIn extends StatelessWidget {
         )
       ],
     );
+  }
+
+  _showMessage(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      duration: Duration(milliseconds: 1500),
+    );
+    widget.scaffoldKey.currentState.showSnackBar(snackBar);
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:traveling/src/blocs/provider.dart';
-import 'package:traveling/src/models/client_model.dart';
-import 'package:traveling/src/providers/ClientProvider.dart';
+import 'package:traveling/src/models/user_model.dart';
+import 'package:traveling/src/preferences/user_preferences.dart';
+import 'package:traveling/src/providers/UserProvider.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   ChangePasswordPage({Key key}) : super(key: key);
@@ -11,11 +12,19 @@ class ChangePasswordPage extends StatefulWidget {
 }
 
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       body: Stack(
-        children: <Widget>[Background(), FormChangePassword()],
+        children: <Widget>[
+          Background(),
+          FormChangePassword(
+            scaffoldKey: scaffoldKey,
+          )
+        ],
       ),
     );
   }
@@ -72,23 +81,26 @@ class Background extends StatelessWidget {
 }
 
 class FormChangePassword extends StatefulWidget {
-  const FormChangePassword({
-    Key key,
-  }) : super(key: key);
+  const FormChangePassword({Key key, this.scaffoldKey}) : super(key: key);
+  final scaffoldKey;
 
   @override
   _FormChangePasswordState createState() => _FormChangePasswordState();
 }
 
 class _FormChangePasswordState extends State<FormChangePassword> {
-  Client client = new Client();
-  ClientProvider clientProvider = new ClientProvider();
+  User user = new User();
+  UserProvider userProvider = new UserProvider();
 
-  final formKey = GlobalKey<FormState>();
+  String _actualPassword = '';
+  String _confirmPassword = '';
+
+  final UserPreferences preferences = new UserPreferences();
 
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of(context);
+    bloc.emailSink('example@gmail.com');
 
     return SingleChildScrollView(
       child: Column(
@@ -105,21 +117,18 @@ class _FormChangePasswordState extends State<FormChangePassword> {
             padding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
             decoration: BoxDecoration(
                 color: Colors.white70, borderRadius: BorderRadius.circular(18)),
-            child: Form(
-              key: formKey,
-              child: Column(
-                children: <Widget>[
-                  _createPassword(bloc),
-                  SizedBox(height: 15),
-                  _createNewPassword(bloc),
-                  SizedBox(height: 15),
-                  _createConfirmPassword(bloc),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  _createSignUpButton(context, bloc),
-                ],
-              ),
+            child: Column(
+              children: <Widget>[
+                _createPassword(bloc),
+                SizedBox(height: 15),
+                _createNewPassword(bloc),
+                SizedBox(height: 15),
+                _createConfirmPassword(bloc),
+                SizedBox(
+                  height: 20,
+                ),
+                _createSignUpButton(context, bloc),
+              ],
             ),
           ),
         ],
@@ -146,21 +155,14 @@ class _FormChangePasswordState extends State<FormChangePassword> {
   }
 
   Widget _createPassword(LoginBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.passwordStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return TextFormField(
-          keyboardType: TextInputType.emailAddress,
-          obscureText: true,
-          decoration: InputDecoration(
-            labelText: 'Password',
-            hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
-            //errorText: snapshot.error,
-          ),
-          //onChanged: bloc.passwordSink,
-          //onSaved: (value) => client.contrasena = value,
-        );
-      },
+    return TextField(
+      keyboardType: TextInputType.text,
+      obscureText: true,
+      decoration: InputDecoration(
+        labelText: 'Password',
+        hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
+      ),
+      onChanged: (value) => _actualPassword = value,
     );
   }
 
@@ -168,7 +170,7 @@ class _FormChangePasswordState extends State<FormChangePassword> {
     return StreamBuilder(
       stream: bloc.passwordStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return TextFormField(
+        return TextField(
           keyboardType: TextInputType.emailAddress,
           obscureText: true,
           decoration: InputDecoration(
@@ -183,51 +185,73 @@ class _FormChangePasswordState extends State<FormChangePassword> {
   }
 
   Widget _createConfirmPassword(LoginBloc bloc) {
+    return TextField(
+      keyboardType: TextInputType.emailAddress,
+      obscureText: true,
+      decoration: InputDecoration(
+        labelText: 'Confirm Password',
+        hintStyle: TextStyle(
+          color: Color.fromRGBO(6, 6, 6, 1),
+        ),
+      ),
+      onChanged: (value) => _confirmPassword = value,
+    );
+  }
+
+  Widget _createSignUpButton(BuildContext context, LoginBloc bloc) {
     return StreamBuilder(
-      stream: bloc.passwordStream,
+      stream: bloc.formValidStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return TextFormField(
-          keyboardType: TextInputType.emailAddress,
-          obscureText: true,
-          decoration: InputDecoration(
-              labelText: 'Confirm Password',
-              hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
-              errorText: snapshot.error),
-          //onChanged: bloc.passwordSink,
-          //onSaved: (value) => client.contrasena = value,
+        return Row(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                child: RaisedButton(
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  child: Text(
+                    'SAVE',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  color: Color.fromRGBO(6, 6, 6, 1),
+                  textColor: Colors.white,
+                  onPressed: () {
+                    if (!snapshot.hasData) return;
+                    _save(context, bloc);
+                  },
+                ),
+              ),
+            ),
+          ],
         );
       },
     );
   }
 
-  Widget _createSignUpButton(BuildContext context, LoginBloc bloc) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: Container(
-            child: RaisedButton(
-              padding: EdgeInsets.symmetric(vertical: 14),
-              child: Text(
-                'SAVE',
-                style: TextStyle(fontSize: 16),
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-              color: Color.fromRGBO(6, 6, 6, 1),
-              textColor: Colors.white,
-              onPressed: () {
-                //if (!formKey.currentState.validate()) return;
-                //formKey.currentState.save();
-                _save(context, bloc);
-              },
-            ),
-          ),
-        ),
-      ],
-    );
+  _save(BuildContext context, LoginBloc bloc) async {
+    if (_confirmPassword == bloc.password) {
+      user.contrasena = bloc.password;
+      user.accessToken = preferences.accessToken;
+      user.refreshToken = preferences.refreshToken;
+      final resultUpdate = await userProvider.updatePassword(user);
+      if (resultUpdate) {
+        preferences.clearPreferences();
+        Navigator.pushReplacementNamed(context, 'signin');
+      } else {
+        _showMessage(
+            'No se pudo modificar la contraseña. Inténtelo nuevamente por favor.');
+      }
+    } else {
+      _showMessage('Las contraseñas no coinciden. Favor de verificar.');
+    }
   }
 
-  _save(BuildContext context, LoginBloc bloc) {
-    Navigator.pushReplacementNamed(context, 'main');
+  _showMessage(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      duration: Duration(milliseconds: 1500),
+    );
+    widget.scaffoldKey.currentState.showSnackBar(snackBar);
   }
 }

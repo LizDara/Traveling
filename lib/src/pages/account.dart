@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:traveling/src/models/client_model.dart';
+import 'package:traveling/src/models/user_model.dart';
+import 'package:traveling/src/preferences/user_preferences.dart';
 import 'package:traveling/src/providers/ClientProvider.dart';
+import 'package:traveling/src/providers/UserProvider.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({Key key}) : super(key: key);
@@ -19,7 +22,9 @@ class _AccountPageState extends State<AccountPage> {
       body: Stack(
         children: <Widget>[
           Background(),
-          FormEdit(),
+          FormEdit(
+            scaffoldKey: scaffoldKey,
+          ),
         ],
       ),
     );
@@ -77,20 +82,22 @@ class Background extends StatelessWidget {
 }
 
 class FormEdit extends StatefulWidget {
-  const FormEdit({
-    Key key,
-  }) : super(key: key);
+  const FormEdit({Key key, this.scaffoldKey}) : super(key: key);
+  final scaffoldKey;
 
   @override
   _FormEditState createState() => _FormEditState();
 }
 
 class _FormEditState extends State<FormEdit> {
+  final UserPreferences preferences = new UserPreferences();
   Client client = new Client();
+  User user = new User();
   ClientProvider clientProvider = new ClientProvider();
+  UserProvider userProvider = new UserProvider();
 
   String _dateOfBirth = '';
-  bool _gender = true;
+  bool _gender;
 
   TextEditingController _dateController = new TextEditingController();
 
@@ -98,6 +105,8 @@ class _FormEditState extends State<FormEdit> {
 
   @override
   Widget build(BuildContext context) {
+    _getInformation();
+
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -149,6 +158,19 @@ class _FormEditState extends State<FormEdit> {
     );
   }
 
+  _getInformation() async {
+    user.accessToken = preferences.accessToken;
+    user.refreshToken = preferences.refreshToken;
+    final Client resultGet = await clientProvider.getClient(user);
+    if (resultGet != null) {
+      client = resultGet;
+      _gender = (client.sexo == 'M') ? false : true;
+    } else {
+      _showMessage(
+          'No se pudo obtener los datos. Inténtelo nuevamente por favor.');
+    }
+  }
+
   Widget _createTitle() {
     return Column(
       children: <Widget>[
@@ -174,6 +196,7 @@ class _FormEditState extends State<FormEdit> {
         labelText: 'CI',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
+      initialValue: client.ci.toString(),
       onSaved: (value) => client.ci = int.parse(value),
     );
   }
@@ -185,6 +208,7 @@ class _FormEditState extends State<FormEdit> {
         labelText: 'Name',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
+      initialValue: client.nombres,
       onSaved: (value) => client.nombres = value,
     );
   }
@@ -196,6 +220,7 @@ class _FormEditState extends State<FormEdit> {
         labelText: 'Last Name',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
+      initialValue: client.apellidos,
       onSaved: (value) => client.apellidos = value,
     );
   }
@@ -207,8 +232,11 @@ class _FormEditState extends State<FormEdit> {
         controller: _dateController,
         decoration: InputDecoration(
           labelText: 'Date of Birth',
-          hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
+          hintStyle: TextStyle(
+            color: Color.fromRGBO(6, 6, 6, 1),
+          ),
         ),
+        initialValue: client.fechaNacimiento,
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
           _selectDate(context);
@@ -226,8 +254,8 @@ class _FormEditState extends State<FormEdit> {
         lastDate: new DateTime(now.year - 10));
     if (picked != null) {
       _dateOfBirth = picked.toString().substring(0, 10);
-      _dateController.text = _dateOfBirth;
-      client.fechaNacimiento = picked.toString().substring(0, 10);
+      _dateController.text = _dateOfBirth.replaceAll(new RegExp(r'-'), '/');
+      client.fechaNacimiento = _dateOfBirth.replaceAll(new RegExp(r'-'), '/');
     }
   }
 
@@ -280,6 +308,7 @@ class _FormEditState extends State<FormEdit> {
         labelText: 'Telephone',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
+      initialValue: client.telefono.toString(),
       onSaved: (value) => client.telefono = int.parse(value),
     );
   }
@@ -291,6 +320,7 @@ class _FormEditState extends State<FormEdit> {
         labelText: 'Direction',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
+      initialValue: client.direccion,
       onSaved: (value) => client.direccion = value,
     );
   }
@@ -302,6 +332,7 @@ class _FormEditState extends State<FormEdit> {
         labelText: 'Passport',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
+      initialValue: client.pasaporte,
       onSaved: (value) => client.pasaporte = value,
     );
   }
@@ -313,6 +344,7 @@ class _FormEditState extends State<FormEdit> {
         labelText: 'NIT',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
+      initialValue: client.nit.toString(),
       onSaved: (value) => client.nit = int.parse(value),
     );
   }
@@ -324,6 +356,7 @@ class _FormEditState extends State<FormEdit> {
         labelText: 'NIT Name',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
+      initialValue: client.nombreNit,
       onSaved: (value) => client.nombreNit = value,
     );
   }
@@ -344,9 +377,9 @@ class _FormEditState extends State<FormEdit> {
               color: Color.fromRGBO(6, 6, 6, 1),
               textColor: Colors.white,
               onPressed: () {
-                //if (!formKey.currentState.validate()) return;
-                //formKey.currentState.save();
-                _edit(context);
+                if (!formKey.currentState.validate()) return;
+                formKey.currentState.save();
+                _update(context);
               },
             ),
           ),
@@ -355,7 +388,23 @@ class _FormEditState extends State<FormEdit> {
     );
   }
 
-  _edit(BuildContext context) {
-    Navigator.pushReplacementNamed(context, 'main');
+  _update(BuildContext context) async {
+    client.accessToken = preferences.accessToken;
+    client.refreshToken = preferences.refreshToken;
+    final resultUpdate = await clientProvider.update(client);
+    if (resultUpdate) {
+      Navigator.pushReplacementNamed(context, 'main');
+    } else {
+      _showMessage(
+          'No se pudo modificar los datos. Inténtelo nuevamente por favor.');
+    }
+  }
+
+  _showMessage(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      duration: Duration(milliseconds: 1500),
+    );
+    widget.scaffoldKey.currentState.showSnackBar(snackBar);
   }
 }

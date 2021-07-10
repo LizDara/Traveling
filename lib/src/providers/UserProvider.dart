@@ -1,45 +1,35 @@
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:traveling/src/models/user_model.dart';
 import 'package:traveling/src/preferences/user_preferences.dart';
 
 class UserProvider {
-  final String _url = '';
+  final String _url = 'http://192.168.0.15:8080';
   final _preferences = new UserPreferences();
 
-  Future<bool> register(User user) async {
-    final url = '$_url/';
-
-    final response = await http.post(url,
-        headers: {'Content-Type': 'application/json'}, body: userToJson(user));
-
-    if (response.statusCode == 200) {
-      return true;
-    }
-    return false;
-  }
-
   Future<bool> login(User user) async {
-    final url = '$_url/';
+    final url = '$_url/iniciar-sesion/';
 
     final response = await http.post(url,
         headers: {'Content-Type': 'application/json'}, body: userToJson(user));
 
     if (response.statusCode == 200) {
-      _preferences.token = response.body.replaceAll(new RegExp(r'"'), '');
+      final data = json.decode(response.body);
+      _preferences.accessToken = data["access_token"];
+      _preferences.refreshToken = data["refresh_token"];
       _preferences.lastPage = 'home';
       return true;
     }
     return false;
   }
 
-  Future<bool> update(int id, User user) async {
-    final url = '$_url/';
+  Future<bool> updatePassword(User user) async {
+    final url = '$_url/cambiar-contrasena/';
 
-    final response = await http.put(url,
+    final response = await http.post(url,
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': '${_preferences.token}'
+          'Accept': 'application/json'
         },
         body: userToJson(user));
 
@@ -49,14 +39,11 @@ class UserProvider {
     return false;
   }
 
-  Future<bool> delete(int id) async {
-    final url = '$_url/';
+  Future<bool> logout(User user) async {
+    final url = '$_url/cerrar-sesion/';
 
-    final response = await http.delete(url, headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': '${_preferences.token}'
-    });
+    final response = await http.post(url,
+        headers: {'Content-Type': 'application/json'}, body: userToJson(user));
 
     if (response.statusCode == 200) {
       return true;

@@ -143,54 +143,55 @@ class OfferSwiper extends StatelessWidget {
             layout: SwiperLayout.STACK,
             itemBuilder: (BuildContext context, int index) {
               return ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: Container(
-                    color: Colors.white,
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          alignment: Alignment.bottomCenter,
-                          child: Image.asset(offers[index].image),
+                borderRadius: BorderRadius.circular(30),
+                child: Container(
+                  color: Colors.white,
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        child: Image.asset(offers[index].image),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Offer',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.orange,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            Text(
+                              offers[index].city,
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  color: Color.fromRGBO(6, 6, 6, 1),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              r'From $ ' + offers[index].price,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Color.fromRGBO(6, 6, 6, 1),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              offers[index].hour + ' ' + offers[index].date,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Color.fromRGBO(6, 6, 6, 0.2),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
-                        Container(
-                          padding: EdgeInsets.all(24),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Offer',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.orange,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              Text(
-                                offers[index].city,
-                                style: TextStyle(
-                                    fontSize: 22,
-                                    color: Color.fromRGBO(6, 6, 6, 1),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                r'From $ ' + offers[index].price,
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Color.fromRGBO(6, 6, 6, 1),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                offers[index].hour + ' ' + offers[index].date,
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: Color.fromRGBO(6, 6, 6, 0.2),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ));
+                      )
+                    ],
+                  ),
+                ),
+              );
             },
           );
   }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:traveling/src/models/user_model.dart';
+import 'package:traveling/src/preferences/user_preferences.dart';
+import 'package:traveling/src/providers/UserProvider.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key key}) : super(key: key);
@@ -44,8 +47,19 @@ class Background extends StatelessWidget {
   }
 }
 
-class FormButton extends StatelessWidget {
-  const FormButton({Key key}) : super(key: key);
+class FormButton extends StatefulWidget {
+  const FormButton({Key key, @required this.scaffoldKey}) : super(key: key);
+  final scaffoldKey;
+  @override
+  _FormButtonState createState() => _FormButtonState();
+}
+
+class _FormButtonState extends State<FormButton> {
+  UserPreferences preferences = new UserPreferences();
+
+  User user = new User();
+
+  UserProvider userProvider = new UserProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -170,16 +184,28 @@ class FormButton extends StatelessWidget {
         IconButton(
             icon:
                 Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black87),
-            onPressed: () => Navigator.pushReplacementNamed(context, 'welcome'))
+            onPressed: () => _logout(context))
       ],
     );
   }
 
-  Widget _createImage(BuildContext context) {
-    return Image(
-      image: AssetImage('assets/traveling.png'),
-      height: MediaQuery.of(context).size.height / 4,
-      color: Colors.black54,
+  _logout(BuildContext context) async {
+    user.accessToken = preferences.accessToken;
+    user.refreshToken = preferences.refreshToken;
+    final resultLogout = await userProvider.logout(user);
+    if (resultLogout) {
+      preferences.clearPreferences();
+      Navigator.pushReplacementNamed(context, 'welcome');
+    } else {
+      _showMessage('No se pudo cerrar sesión. Inténtelo nuevamente por favor.');
+    }
+  }
+
+  _showMessage(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      duration: Duration(milliseconds: 1500),
     );
+    widget.scaffoldKey.currentState.showSnackBar(snackBar);
   }
 }
