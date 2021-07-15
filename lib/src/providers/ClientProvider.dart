@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:traveling/src/models/client_model.dart';
 import 'package:traveling/src/models/user_model.dart';
+import 'package:traveling/src/providers/global.dart';
 
 class ClientProvider {
-  final String _url = 'http://192.168.0.15:8080';
+  final String _url = baseUrl;
 
   Future<bool> register(Client client) async {
     final url = '$_url/registrar-cliente/';
@@ -33,35 +32,26 @@ class ClientProvider {
         },
         body: userToJson(user));
 
+    Client client = new Client();
+    print(response.body);
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      Client client = new Client();
-      client.ci = data["ci"];
-      client.nombres = data["nombres"];
-      client.apellidos = data["apellidos"];
-      client.telefono = data["telefono"];
-      client.fechaNacimiento = data["fecha_nacimiento"];
-      client.sexo = data["sexo"];
-      client.direccion = data["direccion"];
-      client.correoElectronico = data["correo_electronico"];
-      client.pasaporte = data["pasaporte"];
-      client.nit = data["nit"];
-      client.nombreNit = data["nombre_nit"];
-      return client;
+      client = clientFromJson(response.body);
     }
-    return null;
+    return client;
   }
 
   Future<bool> update(Client client) async {
     final url = '$_url/modificar-cliente/';
 
-    final response = await http.put(url,
+    print(clientToJson(client));
+    final response = await http.post(url,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
         body: clientToJson(client));
 
+    print(response.statusCode);
     if (response.statusCode == 200) {
       return true;
     }

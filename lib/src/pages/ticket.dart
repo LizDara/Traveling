@@ -168,7 +168,7 @@ class _DetailState extends State<Detail> {
           child: RaisedButton(
               padding: EdgeInsets.symmetric(vertical: 14),
               child: Text(
-                'DONE',
+                'LISTO',
                 style: TextStyle(fontSize: 16),
               ),
               shape: RoundedRectangleBorder(
@@ -285,7 +285,7 @@ class TicketDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Text(
-                'Ticket Price',
+                'Precio del Boleto',
                 style: TextStyle(
                     color: Colors.black26,
                     fontSize: 12,
@@ -321,7 +321,7 @@ class FlightDetail extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'Depart',
+                'Partida',
                 style: TextStyle(
                     color: Colors.black26,
                     fontSize: 12,
@@ -331,7 +331,7 @@ class FlightDetail extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                'Sun, March 26',
+                'Dom, 26 Marzo',
                 style: TextStyle(
                     color: Color.fromRGBO(6, 6, 6, 1),
                     fontSize: 16,
@@ -341,7 +341,7 @@ class FlightDetail extends StatelessWidget {
                 height: 26,
               ),
               Text(
-                'Arrive',
+                'Llegada',
                 style: TextStyle(
                     color: Colors.black26,
                     fontSize: 12,
@@ -351,7 +351,7 @@ class FlightDetail extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                'Thu, March 30',
+                'Jue, 30 Marzo',
                 style: TextStyle(
                     color: Color.fromRGBO(6, 6, 6, 1),
                     fontSize: 16,
@@ -366,7 +366,7 @@ class FlightDetail extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'Gate',
+                'Entrada',
                 style: TextStyle(
                     color: Colors.black26,
                     fontSize: 12,
@@ -386,7 +386,7 @@ class FlightDetail extends StatelessWidget {
                 height: 26,
               ),
               Text(
-                'Seat',
+                'Asiento',
                 style: TextStyle(
                     color: Colors.black26,
                     fontSize: 12,
@@ -411,7 +411,7 @@ class FlightDetail extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'Flight Number',
+                'Número Vuelo',
                 style: TextStyle(
                     color: Colors.black26,
                     fontSize: 12,
@@ -431,7 +431,7 @@ class FlightDetail extends StatelessWidget {
                 height: 26,
               ),
               Text(
-                'Class',
+                'Clase',
                 style: TextStyle(
                     color: Colors.black26,
                     fontSize: 12,
@@ -441,7 +441,7 @@ class FlightDetail extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                'Business',
+                'Ejecutivo',
                 style: TextStyle(
                     color: Color.fromRGBO(6, 6, 6, 1),
                     fontSize: 16,

@@ -169,11 +169,11 @@ class _FormSignUpState extends State<FormSignUp> {
     return Column(
       children: <Widget>[
         Text(
-          'Create',
+          'Crea',
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
         Text(
-          'your account',
+          'tu cuenta aquí',
           style: TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.bold,
@@ -198,7 +198,7 @@ class _FormSignUpState extends State<FormSignUp> {
     return TextFormField(
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: 'Name',
+        labelText: 'Nombres',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       onSaved: (value) => client.nombres = value,
@@ -209,7 +209,7 @@ class _FormSignUpState extends State<FormSignUp> {
     return TextFormField(
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: 'Last Name',
+        labelText: 'Apellidos',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       onSaved: (value) => client.apellidos = value,
@@ -222,7 +222,7 @@ class _FormSignUpState extends State<FormSignUp> {
         enableInteractiveSelection: false,
         controller: _dateController,
         decoration: InputDecoration(
-          labelText: 'Date of Birth',
+          labelText: 'Fecha de Nacimiento',
           hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
         ),
         onTap: () {
@@ -242,8 +242,8 @@ class _FormSignUpState extends State<FormSignUp> {
         lastDate: new DateTime(now.year - 10));
     if (picked != null) {
       _dateOfBirth = picked.toString().substring(0, 10);
-      _dateController.text = _dateOfBirth.replaceAll(new RegExp(r'-'), '/');
-      client.fechaNacimiento = _dateOfBirth.replaceAll(new RegExp(r'-'), '/');
+      _dateController.text = _dateOfBirth;
+      client.fechaNacimiento = _dateOfBirth;
     }
   }
 
@@ -252,7 +252,7 @@ class _FormSignUpState extends State<FormSignUp> {
       child: Row(
         children: <Widget>[
           Text(
-            'Gender',
+            'Género',
             style: TextStyle(fontSize: 16),
           ),
           Checkbox(
@@ -293,7 +293,7 @@ class _FormSignUpState extends State<FormSignUp> {
     return TextFormField(
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        labelText: 'Telephone',
+        labelText: 'Teléfono',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       onSaved: (value) => client.telefono = int.parse(value),
@@ -304,7 +304,7 @@ class _FormSignUpState extends State<FormSignUp> {
     return TextFormField(
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
-        labelText: 'Direction',
+        labelText: 'Dirección',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       onSaved: (value) => client.direccion = value,
@@ -315,7 +315,7 @@ class _FormSignUpState extends State<FormSignUp> {
     return TextFormField(
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: 'Passport',
+        labelText: 'Pasaporte',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       onSaved: (value) => client.pasaporte = value,
@@ -337,7 +337,7 @@ class _FormSignUpState extends State<FormSignUp> {
     return TextFormField(
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: 'NIT Name',
+        labelText: 'Nombre NIT',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       onSaved: (value) => client.nombreNit = value,
@@ -351,7 +351,7 @@ class _FormSignUpState extends State<FormSignUp> {
           return TextFormField(
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-                labelText: 'Email',
+                labelText: 'Correo Electrónico',
                 hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
                 errorText: snapshot.error),
             onChanged: bloc.emailSink,
@@ -368,7 +368,7 @@ class _FormSignUpState extends State<FormSignUp> {
           keyboardType: TextInputType.emailAddress,
           obscureText: true,
           decoration: InputDecoration(
-              labelText: 'Password',
+              labelText: 'Contraseña',
               hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
               errorText: snapshot.error),
           onChanged: bloc.passwordSink,
@@ -383,7 +383,7 @@ class _FormSignUpState extends State<FormSignUp> {
       keyboardType: TextInputType.emailAddress,
       obscureText: true,
       decoration: InputDecoration(
-        labelText: 'Confirm Password',
+        labelText: 'Confirmar Contraseña',
         hintStyle: TextStyle(
           color: Color.fromRGBO(6, 6, 6, 1),
         ),
@@ -403,7 +403,7 @@ class _FormSignUpState extends State<FormSignUp> {
                 child: RaisedButton(
                   padding: EdgeInsets.symmetric(vertical: 14),
                   child: Text(
-                    'SIGN UP',
+                    'REGISTRARSE',
                     style: TextStyle(fontSize: 16),
                   ),
                   shape: RoundedRectangleBorder(
@@ -430,13 +430,13 @@ class _FormSignUpState extends State<FormSignUp> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          "Already have an account?",
+          "Ya tienes una cuenta?",
           style: TextStyle(fontSize: 15),
         ),
         FlatButton(
           onPressed: () => Navigator.pushReplacementNamed(context, 'signin'),
           child: Text(
-            'Sign in',
+            'Inicia sesión',
             style:
                 TextStyle(fontSize: 15, decoration: TextDecoration.underline),
           ),

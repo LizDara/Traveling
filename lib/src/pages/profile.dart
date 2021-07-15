@@ -129,7 +129,7 @@ class _FormButtonState extends State<FormButton> {
           width: 14,
         ),
         Text(
-          'Edit profile',
+          'Editar perfil',
           style: TextStyle(fontSize: 16, color: Colors.black87),
         ),
         Expanded(child: Container()),
@@ -149,7 +149,7 @@ class _FormButtonState extends State<FormButton> {
           width: 14,
         ),
         Text(
-          'Change password',
+          'Cambiar contraseña',
           style: TextStyle(fontSize: 16, color: Colors.black87),
         ),
         Expanded(child: Container()),
@@ -182,7 +182,7 @@ class _FormButtonState extends State<FormButton> {
           width: 14,
         ),
         Text(
-          'Log out',
+          'Cerrar sesión',
           style: TextStyle(fontSize: 16, color: Colors.black87),
         ),
         Expanded(child: Container()),

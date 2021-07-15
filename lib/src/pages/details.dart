@@ -148,7 +148,7 @@ class _FormDetailState extends State<FormDetail> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 25),
+        margin: EdgeInsets.symmetric(horizontal: 15),
         child: Form(
           key: formKey,
           child: Column(
@@ -176,7 +176,7 @@ class _FormDetailState extends State<FormDetail> {
           child: RaisedButton(
               padding: EdgeInsets.symmetric(vertical: 14),
               child: Text(
-                'NEXT',
+                'SIGUIENTE',
                 style: TextStyle(fontSize: 16),
               ),
               shape: RoundedRectangleBorder(
@@ -236,8 +236,8 @@ class FlightDetails extends StatelessWidget {
 
   Widget _createTitle() {
     return Text(
-      'Flight details',
-      style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
+      'Detalles del Vuelo',
+      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
     );
   }
 
@@ -252,7 +252,7 @@ class FlightDetails extends StatelessWidget {
           width: 5,
         ),
         Text(
-          'Round Trip',
+          'Viaje de Vuelta',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
         Expanded(
@@ -293,11 +293,11 @@ class FlightDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                '26 March 2020, 19:45',
+                '26 de Marzo 2020, 19:45',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               Text(
-                'DEPARTURE',
+                'PARTIDA',
                 style: TextStyle(
                     fontSize: 10,
                     color: Colors.black26,
@@ -344,11 +344,11 @@ class FlightDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                '30 March 2020, 13:30',
+                '30 de Marzo 2020, 13:30',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               Text(
-                'RETURN',
+                'LLEGADA',
                 style: TextStyle(
                     fontSize: 10,
                     color: Colors.black26,
@@ -395,11 +395,11 @@ class FlightDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'Business',
+                'Ejecutivo',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               Text(
-                'CLASS',
+                'CLASE',
                 style: TextStyle(
                     fontSize: 10,
                     color: Colors.black26,
@@ -446,11 +446,11 @@ class FlightDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                '2 Persons',
+                '2 Personas',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               Text(
-                'PASSENGER',
+                'PASAJEROS',
                 style: TextStyle(
                     fontSize: 10,
                     color: Colors.black26,

@@ -85,21 +85,21 @@ class Tickets extends StatefulWidget {
 }
 
 class _TicketsState extends State<Tickets> {
-  final List<Reservation> reservations = new List();
-  /*[
+  final List<Reservation> reservations = //new List();
+      [
     new Reservation(
         from: 'Botswana',
         to: 'Bermudas',
         departure: 'TBS',
         destination: 'BER',
         time: '3h 40m',
-        departureDate: 'Jan 29',
-        destinationDate: 'Jan 30',
+        departureDate: 'Ene 29',
+        destinationDate: 'Ene 30',
         departureHour: '20:00',
         destinationHour: '01:00',
         price: '226',
         flight: 'KC89',
-        typeClass: 'Business',
+        typeClass: 'Ejecutivo',
         isExpanded: false),
     new Reservation(
         from: 'Dhaka',
@@ -113,7 +113,7 @@ class _TicketsState extends State<Tickets> {
         destinationHour: '01:55',
         price: '695',
         flight: 'CK88',
-        typeClass: 'Business',
+        typeClass: 'Ejecutivo',
         isExpanded: false),
     new Reservation(
         from: 'Botswana',
@@ -121,13 +121,13 @@ class _TicketsState extends State<Tickets> {
         departure: 'TBS',
         destination: 'BER',
         time: '3h 40m',
-        departureDate: 'Jan 29',
-        destinationDate: 'Jan 30',
+        departureDate: 'Ene 29',
+        destinationDate: 'Ene 30',
         departureHour: '20:00',
         destinationHour: '01:00',
         price: '226',
         flight: 'KC89',
-        typeClass: 'Business',
+        typeClass: 'Ejecutivo',
         isExpanded: false),
     new Reservation(
         from: 'Dhaka',
@@ -141,16 +141,16 @@ class _TicketsState extends State<Tickets> {
         destinationHour: '01:55',
         price: '695',
         flight: 'CK88',
-        typeClass: 'Business',
+        typeClass: 'Ejecutivo',
         isExpanded: false),
-  ];*/
+  ];
 
   @override
   Widget build(BuildContext context) {
     return (reservations.length == 0)
         ? Center(
             child: Text(
-              'No flights.',
+              'No hay Boletos.',
               style: TextStyle(color: Colors.black54, fontSize: 16),
             ),
           )
@@ -197,7 +197,7 @@ class _TicketsState extends State<Tickets> {
                               height: 28,
                             ),
                             Text(
-                              'DATE',
+                              'FECHA',
                               style: TextStyle(
                                   fontSize: 11,
                                   color: Color.fromRGBO(6, 6, 6, 0.55),
@@ -258,7 +258,7 @@ class _TicketsState extends State<Tickets> {
                               height: 28,
                             ),
                             Text(
-                              'FLIGHT NO',
+                              'NÚMERO DE VUELO',
                               style: TextStyle(
                                   fontSize: 11,
                                   color: Color.fromRGBO(6, 6, 6, 0.55),

@@ -127,11 +127,11 @@ class _FormSignInState extends State<FormSignIn> {
     return Column(
       children: <Widget>[
         Text(
-          'Welcome back,',
+          'Bienvenido,',
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
         Text(
-          'Sign in!',
+          'Inicia Sesión!',
           style: TextStyle(
             fontSize: 50,
             fontWeight: FontWeight.bold,
@@ -148,7 +148,7 @@ class _FormSignInState extends State<FormSignIn> {
           return TextField(
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              labelText: 'Email',
+              labelText: 'Correo Electrónico',
               hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
             ),
             onChanged: bloc.emailSink,
@@ -164,7 +164,7 @@ class _FormSignInState extends State<FormSignIn> {
             keyboardType: TextInputType.text,
             obscureText: true,
             decoration: InputDecoration(
-              labelText: 'Password',
+              labelText: 'Contraseña',
               hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
             ),
             onChanged: bloc.passwordSink,
@@ -183,7 +183,7 @@ class _FormSignInState extends State<FormSignIn> {
                 child: RaisedButton(
                     padding: EdgeInsets.symmetric(vertical: 14),
                     child: Text(
-                      'SIGN IN',
+                      'INICIAR SESIÓN',
                       style: TextStyle(fontSize: 16),
                     ),
                     shape: RoundedRectangleBorder(
@@ -216,13 +216,13 @@ class _FormSignInState extends State<FormSignIn> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          "Don't have an account?",
+          "No tienes una cuenta?",
           style: TextStyle(fontSize: 16),
         ),
         FlatButton(
           onPressed: () => Navigator.pushReplacementNamed(context, 'signup'),
           child: Text(
-            'Sign up',
+            'Regístrate',
             style:
                 TextStyle(fontSize: 16, decoration: TextDecoration.underline),
           ),

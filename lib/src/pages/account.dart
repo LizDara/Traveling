@@ -91,13 +91,14 @@ class FormEdit extends StatefulWidget {
 
 class _FormEditState extends State<FormEdit> {
   final UserPreferences preferences = new UserPreferences();
+
   Client client = new Client();
   User user = new User();
   ClientProvider clientProvider = new ClientProvider();
   UserProvider userProvider = new UserProvider();
 
   String _dateOfBirth = '';
-  bool _gender;
+  bool _gender = true;
 
   TextEditingController _dateController = new TextEditingController();
 
@@ -105,7 +106,8 @@ class _FormEditState extends State<FormEdit> {
 
   @override
   Widget build(BuildContext context) {
-    _getInformation();
+    user.accessToken = preferences.accessToken;
+    user.refreshToken = preferences.refreshToken;
 
     return SingleChildScrollView(
       child: Column(
@@ -117,7 +119,41 @@ class _FormEditState extends State<FormEdit> {
           SizedBox(
             height: 14,
           ),
-          Container(
+          _createForm(),
+        ],
+      ),
+    );
+  }
+
+  Widget _createTitle() {
+    return Column(
+      children: <Widget>[
+        Text(
+          'Edita',
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          'tu cuenta aquí',
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _createForm() {
+    return FutureBuilder(
+      future: clientProvider.getClient(user),
+      builder: (BuildContext context, AsyncSnapshot<Client> snapshot) {
+        if (snapshot.hasData) {
+          client = snapshot.data;
+          _gender = (client.sexo == 'M') ? false : true;
+          _dateController.text = client.fechaNacimiento.substring(0, 10);
+          client.fechaNacimiento = client.fechaNacimiento.substring(0, 10);
+
+          return Container(
             margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             padding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
             decoration: BoxDecoration(
@@ -152,40 +188,15 @@ class _FormEditState extends State<FormEdit> {
                 ],
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _getInformation() async {
-    user.accessToken = preferences.accessToken;
-    user.refreshToken = preferences.refreshToken;
-    final Client resultGet = await clientProvider.getClient(user);
-    if (resultGet != null) {
-      client = resultGet;
-      _gender = (client.sexo == 'M') ? false : true;
-    } else {
-      _showMessage(
-          'No se pudo obtener los datos. Inténtelo nuevamente por favor.');
-    }
-  }
-
-  Widget _createTitle() {
-    return Column(
-      children: <Widget>[
-        Text(
-          'Edit',
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-        ),
-        Text(
-          'your account',
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-          ),
-        )
-      ],
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white54),
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -205,7 +216,7 @@ class _FormEditState extends State<FormEdit> {
     return TextFormField(
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: 'Name',
+        labelText: 'Nombres',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       initialValue: client.nombres,
@@ -217,7 +228,7 @@ class _FormEditState extends State<FormEdit> {
     return TextFormField(
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: 'Last Name',
+        labelText: 'Apellidos',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       initialValue: client.apellidos,
@@ -226,22 +237,19 @@ class _FormEditState extends State<FormEdit> {
   }
 
   Widget _createDateOfBirth(BuildContext context) {
-    return Container(
-      child: TextFormField(
-        enableInteractiveSelection: false,
-        controller: _dateController,
-        decoration: InputDecoration(
-          labelText: 'Date of Birth',
-          hintStyle: TextStyle(
-            color: Color.fromRGBO(6, 6, 6, 1),
-          ),
+    return TextFormField(
+      enableInteractiveSelection: false,
+      controller: _dateController,
+      decoration: InputDecoration(
+        labelText: 'Fecha de Nacimiento',
+        hintStyle: TextStyle(
+          color: Color.fromRGBO(6, 6, 6, 1),
         ),
-        initialValue: client.fechaNacimiento,
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-          _selectDate(context);
-        },
       ),
+      onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
+        _selectDate(context);
+      },
     );
   }
 
@@ -254,8 +262,8 @@ class _FormEditState extends State<FormEdit> {
         lastDate: new DateTime(now.year - 10));
     if (picked != null) {
       _dateOfBirth = picked.toString().substring(0, 10);
-      _dateController.text = _dateOfBirth.replaceAll(new RegExp(r'-'), '/');
-      client.fechaNacimiento = _dateOfBirth.replaceAll(new RegExp(r'-'), '/');
+      _dateController.text = _dateOfBirth;
+      client.fechaNacimiento = _dateOfBirth;
     }
   }
 
@@ -264,14 +272,14 @@ class _FormEditState extends State<FormEdit> {
       child: Row(
         children: <Widget>[
           Text(
-            'Gender',
+            'Género',
             style: TextStyle(fontSize: 16),
           ),
           Checkbox(
             value: !_gender,
-            onChanged: (female) {
+            onChanged: (isFemale) {
               setState(() {
-                _gender = !female;
+                _gender = !isFemale;
                 client.sexo = "M";
               });
             },
@@ -284,10 +292,11 @@ class _FormEditState extends State<FormEdit> {
           SizedBox(width: 50),
           Checkbox(
             value: _gender,
-            onChanged: (female) {
+            onChanged: (isFemale) {
               setState(() {
-                _gender = female;
+                _gender = !isFemale;
                 client.sexo = "F";
+                print('GÉNERO');
               });
             },
             activeColor: Color.fromRGBO(6, 6, 6, 1),
@@ -305,7 +314,7 @@ class _FormEditState extends State<FormEdit> {
     return TextFormField(
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        labelText: 'Telephone',
+        labelText: 'Teléfono',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       initialValue: client.telefono.toString(),
@@ -317,7 +326,7 @@ class _FormEditState extends State<FormEdit> {
     return TextFormField(
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
-        labelText: 'Direction',
+        labelText: 'Dirección',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       initialValue: client.direccion,
@@ -329,7 +338,7 @@ class _FormEditState extends State<FormEdit> {
     return TextFormField(
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: 'Passport',
+        labelText: 'Pasaporte',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       initialValue: client.pasaporte,
@@ -353,7 +362,7 @@ class _FormEditState extends State<FormEdit> {
     return TextFormField(
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: 'NIT Name',
+        labelText: 'Nombre NIT',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       initialValue: client.nombreNit,
@@ -369,7 +378,7 @@ class _FormEditState extends State<FormEdit> {
             child: RaisedButton(
               padding: EdgeInsets.symmetric(vertical: 14),
               child: Text(
-                'SAVE',
+                'GUARDAR',
                 style: TextStyle(fontSize: 16),
               ),
               shape: RoundedRectangleBorder(

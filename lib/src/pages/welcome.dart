@@ -72,7 +72,7 @@ class Welcome extends StatelessWidget {
       child: Stack(
         children: <Widget>[
           Text(
-            'Fly anywhere in the world with the Volad Tours mobile app.',
+            'Vuela a cualquier parte del mundo con la aplicaión Volad Tours.',
             style: TextStyle(fontSize: 17),
           ),
           Positioned(
@@ -120,6 +120,7 @@ class GetStarted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         _createTitle(),
         SizedBox(
@@ -135,11 +136,11 @@ class GetStarted extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'Tickets',
+          'Reserva de',
           style: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.5), fontSize: 30),
         ),
         Text(
-          'booking',
+          'Vuelos',
           style: TextStyle(
               color: Color.fromRGBO(0, 0, 0, 1),
               fontSize: 30,
@@ -154,7 +155,7 @@ class GetStarted extends StatelessWidget {
       onPressed: () =>
           Navigator.pushReplacementNamed(context, preferences.lastPage),
       child: Text(
-        'Get Started',
+        'Empecemos',
         style: TextStyle(fontSize: 16),
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

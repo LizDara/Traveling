@@ -45,21 +45,21 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
-  final List<Reservation> reservations = new List();
-  /*[
+  final List<Reservation> reservations = //new List();
+      [
     new Reservation(
         from: 'Botswana',
         to: 'Bermudas',
         departure: 'TBS',
         destination: 'BER',
         time: '3h 40m',
-        departureDate: 'Jan 29',
-        destinationDate: 'Jan 30',
+        departureDate: 'Ene 29',
+        destinationDate: 'Ene 30',
         departureHour: '20:00',
         destinationHour: '01:00',
         price: '226',
         flight: 'KC89',
-        typeClass: 'Business',
+        typeClass: 'Ejecutivo',
         isExpanded: false),
     new Reservation(
         from: 'Dhaka',
@@ -73,7 +73,7 @@ class _NotificationsState extends State<Notifications> {
         destinationHour: '01:55',
         price: '695',
         flight: 'CK88',
-        typeClass: 'Business',
+        typeClass: 'Ejecutivo',
         isExpanded: false),
     new Reservation(
         from: 'Botswana',
@@ -81,13 +81,13 @@ class _NotificationsState extends State<Notifications> {
         departure: 'TBS',
         destination: 'BER',
         time: '3h 40m',
-        departureDate: 'Jan 29',
-        destinationDate: 'Jan 30',
+        departureDate: 'Ene 29',
+        destinationDate: 'Ene 30',
         departureHour: '20:00',
         destinationHour: '01:00',
         price: '226',
         flight: 'KC89',
-        typeClass: 'Business',
+        typeClass: 'Ejecutivo',
         isExpanded: false),
     new Reservation(
         from: 'Dhaka',
@@ -101,7 +101,7 @@ class _NotificationsState extends State<Notifications> {
         destinationHour: '01:55',
         price: '695',
         flight: 'CK88',
-        typeClass: 'Business',
+        typeClass: 'Ejecutivo',
         isExpanded: false),
     new Reservation(
         from: 'Botswana',
@@ -109,13 +109,13 @@ class _NotificationsState extends State<Notifications> {
         departure: 'TBS',
         destination: 'BER',
         time: '3h 40m',
-        departureDate: 'Jan 29',
-        destinationDate: 'Jan 30',
+        departureDate: 'Ene 29',
+        destinationDate: 'Ene 30',
         departureHour: '20:00',
         destinationHour: '01:00',
         price: '226',
         flight: 'KC89',
-        typeClass: 'Business',
+        typeClass: 'Ejecutivo',
         isExpanded: false),
     new Reservation(
         from: 'Dhaka',
@@ -129,7 +129,7 @@ class _NotificationsState extends State<Notifications> {
         destinationHour: '01:55',
         price: '695',
         flight: 'CK88',
-        typeClass: 'Business',
+        typeClass: 'Ejecutivo',
         isExpanded: false),
     new Reservation(
         from: 'Botswana',
@@ -137,13 +137,13 @@ class _NotificationsState extends State<Notifications> {
         departure: 'TBS',
         destination: 'BER',
         time: '3h 40m',
-        departureDate: 'Jan 29',
-        destinationDate: 'Jan 30',
+        departureDate: 'Ene 29',
+        destinationDate: 'Ene 30',
         departureHour: '20:00',
         destinationHour: '01:00',
         price: '226',
         flight: 'KC89',
-        typeClass: 'Business',
+        typeClass: 'Ejecutivo',
         isExpanded: false),
     new Reservation(
         from: 'Dhaka',
@@ -157,16 +157,16 @@ class _NotificationsState extends State<Notifications> {
         destinationHour: '01:55',
         price: '695',
         flight: 'CK88',
-        typeClass: 'Business',
+        typeClass: 'Ejecutivo',
         isExpanded: false),
-  ];*/
+  ];
 
   @override
   Widget build(BuildContext context) {
     return (reservations.length == 0)
         ? Center(
             child: Text(
-              'No notifications.',
+              'No hay Notificaciones.',
               style: TextStyle(color: Colors.black54, fontSize: 16),
             ),
           )
@@ -194,9 +194,9 @@ class _NotificationsState extends State<Notifications> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'Fligth ' +
+                            'Vuelo ' +
                                 reservations[index].flight +
-                                ', bound for ' +
+                                ', con destino a ' +
                                 reservations[index].to,
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w700),
@@ -206,7 +206,7 @@ class _NotificationsState extends State<Notifications> {
                           ),
                           Text(
                             reservations[index].time +
-                                ' to take off the airplane. Pack your bags.',
+                                ' restantes para abordar el avión. Empaca tus maletas.',
                             style:
                                 TextStyle(fontSize: 13, color: Colors.black54),
                             maxLines: 3,

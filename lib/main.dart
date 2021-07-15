@@ -11,6 +11,21 @@ void main() async {
   runApp(MyApp());
 }
 
+/*class AppState extends StatelessWidget {
+  const AppState({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => RegionProvider(),
+        )
+      ],
+    );
+  }
+}*/
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

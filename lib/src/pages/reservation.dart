@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:traveling/src/models/region_model.dart';
+import 'package:traveling/src/widgets/RegionSearchDelegate.dart';
 
 class ReservationPage extends StatefulWidget {
   ReservationPage({Key key}) : super(key: key);
@@ -69,6 +71,11 @@ class FormReservation extends StatefulWidget {
 }
 
 class _FormReservationState extends State<FormReservation> {
+  dynamic departure = new Region();
+  dynamic destination = new Region();
+  TextEditingController departureController = new TextEditingController();
+  TextEditingController destinationController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -85,11 +92,11 @@ class _FormReservationState extends State<FormReservation> {
             SizedBox(
               height: 10,
             ),
-            _createDeparture(),
+            _createDeparture(context),
             SizedBox(
               height: 6,
             ),
-            _createDestination(),
+            _createDestination(context),
             SizedBox(
               height: 20,
             ),
@@ -105,18 +112,18 @@ class _FormReservationState extends State<FormReservation> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'Love at',
+          'Encuentra',
           style: TextStyle(fontSize: 44, fontWeight: FontWeight.bold),
         ),
         Text(
-          'First Flight',
+          'tu vuelo aquí',
           style: TextStyle(fontSize: 44, fontWeight: FontWeight.bold),
         )
       ],
     );
   }
 
-  Widget _createDeparture() {
+  Widget _createDeparture(BuildContext context) {
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
@@ -124,25 +131,38 @@ class _FormReservationState extends State<FormReservation> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
         color: Colors.white,
-        child: TextField(
-          style: TextStyle(fontSize: 20),
-          decoration: InputDecoration(
-              labelText: 'From',
-              labelStyle: TextStyle(
-                color: Color.fromRGBO(0, 0, 0, 0.3),
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-              icon: Icon(
-                Icons.flight_takeoff,
-              ),
-              border: InputBorder.none),
-        ),
+        child: TextFormField(
+            enableInteractiveSelection: false,
+            controller: departureController,
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            style: TextStyle(fontSize: 20),
+            decoration: InputDecoration(
+                labelText: 'Desde',
+                labelStyle: TextStyle(
+                  color: Color.fromRGBO(0, 0, 0, 0.3),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+                icon: Icon(
+                  Icons.flight_takeoff,
+                ),
+                border: InputBorder.none),
+            onTap: () {
+              FocusScope.of(context).requestFocus(new FocusNode());
+              _getDepartureRegion(context);
+            }),
       ),
     );
   }
 
-  Widget _createDestination() {
+  _getDepartureRegion(BuildContext context) async {
+    departure =
+        await showSearch(context: context, delegate: RegionSearchDelegate());
+    departureController.text = departure.name;
+  }
+
+  Widget _createDestination(BuildContext context) {
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
@@ -150,21 +170,34 @@ class _FormReservationState extends State<FormReservation> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
         color: Colors.white,
-        child: TextField(
-          style: TextStyle(fontSize: 20),
-          decoration: InputDecoration(
-              labelText: 'To',
-              labelStyle: TextStyle(
-                  color: Color.fromRGBO(0, 0, 0, 0.3),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20),
-              icon: Icon(
-                Icons.flight_land,
-              ),
-              border: InputBorder.none),
-        ),
+        child: TextFormField(
+            enableInteractiveSelection: false,
+            controller: destinationController,
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            style: TextStyle(fontSize: 20),
+            decoration: InputDecoration(
+                labelText: 'Hasta',
+                labelStyle: TextStyle(
+                    color: Color.fromRGBO(0, 0, 0, 0.3),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+                icon: Icon(
+                  Icons.flight_land,
+                ),
+                border: InputBorder.none),
+            onTap: () {
+              FocusScope.of(context).requestFocus(new FocusNode());
+              _getDestinationRegion(context);
+            }),
       ),
     );
+  }
+
+  _getDestinationRegion(BuildContext context) async {
+    destination =
+        await showSearch(context: context, delegate: RegionSearchDelegate());
+    destinationController.text = departure.name;
   }
 
   Widget _createGoButton(BuildContext context) {
@@ -175,7 +208,7 @@ class _FormReservationState extends State<FormReservation> {
             child: RaisedButton(
               padding: EdgeInsets.symmetric(vertical: 14),
               child: Text(
-                'GO',
+                'VAMOS',
                 style: TextStyle(fontSize: 16),
               ),
               shape: RoundedRectangleBorder(

@@ -140,11 +140,11 @@ class _FormChangePasswordState extends State<FormChangePassword> {
     return Column(
       children: <Widget>[
         Text(
-          'Change',
+          'Cambia',
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
         Text(
-          'your password',
+          'tu contraseña',
           style: TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.bold,
@@ -159,7 +159,7 @@ class _FormChangePasswordState extends State<FormChangePassword> {
       keyboardType: TextInputType.text,
       obscureText: true,
       decoration: InputDecoration(
-        labelText: 'Password',
+        labelText: 'Contraseña',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       onChanged: (value) => _actualPassword = value,
@@ -174,7 +174,7 @@ class _FormChangePasswordState extends State<FormChangePassword> {
           keyboardType: TextInputType.emailAddress,
           obscureText: true,
           decoration: InputDecoration(
-              labelText: 'New Password',
+              labelText: 'Nueva Contraseña',
               hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
               errorText: snapshot.error),
           onChanged: bloc.passwordSink,
@@ -189,7 +189,7 @@ class _FormChangePasswordState extends State<FormChangePassword> {
       keyboardType: TextInputType.emailAddress,
       obscureText: true,
       decoration: InputDecoration(
-        labelText: 'Confirm Password',
+        labelText: 'Confirmar Contraseña',
         hintStyle: TextStyle(
           color: Color.fromRGBO(6, 6, 6, 1),
         ),
@@ -209,7 +209,7 @@ class _FormChangePasswordState extends State<FormChangePassword> {
                 child: RaisedButton(
                   padding: EdgeInsets.symmetric(vertical: 14),
                   child: Text(
-                    'SAVE',
+                    'GUARDAR',
                     style: TextStyle(fontSize: 16),
                   ),
                   shape: RoundedRectangleBorder(

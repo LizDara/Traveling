@@ -80,18 +80,18 @@ class FindTrip extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          "Let's Make Our",
+          "No Todos Podemos",
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
         Text(
-          "Life so a Life",
+          "Quedarnos en Casa",
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
         SizedBox(
           height: 14,
         ),
         Text(
-          'You find the best offers for your business trip or vacation.',
+          'Encuentra las mejores ofertas para tus viajes de negocio o vaciones.',
           style: TextStyle(fontSize: 16),
         ),
       ],

@@ -47,8 +47,8 @@ class Details extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
-  final List<Offer> offers = new List();
-  /*[
+  final List<Offer> offers = // List();
+      [
     new Offer(
         city: 'Dubai',
         price: '128',
@@ -61,23 +61,23 @@ class Details extends StatelessWidget {
         hour: '11:35',
         date: 'Feb 02',
         image: 'assets/venice.png')
-  ];*/
+  ];
 
-  final List<Reservation> reservations = new List();
-  /*[
+  final List<Reservation> reservations = //new List();
+      [
     new Reservation(
         from: 'Botswana',
         to: 'Bermudas',
         departure: 'TBS',
         destination: 'BER',
         time: '3h 40m',
-        departureDate: 'Jan 29',
-        destinationDate: 'Jan 30',
+        departureDate: 'Ene 29',
+        destinationDate: 'Ene 30',
         departureHour: '20:00',
         destinationHour: '01:00',
         price: '226',
         flight: 'KC89',
-        typeClass: 'Business'),
+        typeClass: 'Ejecutivo'),
     new Reservation(
         from: 'Dhaka',
         to: 'Singapore',
@@ -90,8 +90,8 @@ class Details extends StatelessWidget {
         destinationHour: '01:55',
         price: '695',
         flight: 'CK88',
-        typeClass: 'Business')
-  ];*/
+        typeClass: 'Ejecutivo')
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +130,7 @@ class OfferSwiper extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 2 / 5,
             child: Center(
               child: Text(
-                'No offers.',
+                'No hay Ofertas.',
                 style: TextStyle(color: Colors.black54, fontSize: 16),
               ),
             ),
@@ -158,7 +158,7 @@ class OfferSwiper extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              'Offer',
+                              'Ofertas',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.orange,
@@ -172,7 +172,7 @@ class OfferSwiper extends StatelessWidget {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              r'From $ ' + offers[index].price,
+                              r'Desde $ ' + offers[index].price,
                               style: TextStyle(
                                   fontSize: 16,
                                   color: Color.fromRGBO(6, 6, 6, 1),
@@ -210,7 +210,7 @@ class ReservationSwiper extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 4 / 11,
             child: Center(
               child: Text(
-                'No pending flights.',
+                'No hay Vuelos Pendientes.',
                 style: TextStyle(color: Colors.black54, fontSize: 16),
               ),
             ),
@@ -315,7 +315,7 @@ class ReservationSwiper extends StatelessWidget {
                       Row(
                         children: <Widget>[
                           Text(
-                            'Show details',
+                            'Ver Detalles',
                             style: TextStyle(fontSize: 15),
                           ),
                           IconButton(

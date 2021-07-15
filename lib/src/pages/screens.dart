@@ -49,35 +49,35 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             title: Text(
-              'Home',
+              'Inicio',
               style: TextStyle(fontSize: 10),
             ),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             title: Text(
-              'Find Trip',
+              'Viajar',
               style: TextStyle(fontSize: 10),
             ),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications),
             title: Text(
-              'Notify',
+              'Notificación',
               style: TextStyle(fontSize: 10),
             ),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.confirmation_number),
             title: Text(
-              'Tickets',
+              'Boletos',
               style: TextStyle(fontSize: 10),
             ),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             title: Text(
-              'Profile',
+              'Perfil',
               style: TextStyle(fontSize: 10),
             ),
           ),
