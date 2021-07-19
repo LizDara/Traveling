@@ -215,7 +215,10 @@ class _FormReservationState extends State<FormReservation> {
                   borderRadius: BorderRadius.circular(8)),
               color: Color.fromRGBO(6, 6, 6, 1),
               textColor: Colors.white,
-              onPressed: () => Navigator.pushNamed(context, 'details'),
+              onPressed: () {
+                List<Region> regions = [departure, destination];
+                Navigator.pushNamed(context, 'details', arguments: regions);
+              },
             ),
           ),
         ),

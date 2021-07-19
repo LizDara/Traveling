@@ -256,10 +256,12 @@ class _FormEditState extends State<FormEdit> {
   _selectDate(BuildContext context) async {
     DateTime now = new DateTime.now();
     DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: new DateTime(now.year - 11),
-        firstDate: new DateTime(now.year - 80),
-        lastDate: new DateTime(now.year - 10));
+      context: context,
+      initialDate: new DateTime(now.year - 11),
+      firstDate: new DateTime(now.year - 80),
+      lastDate: new DateTime(now.year - 10),
+      locale: Locale('es', 'ES'),
+    );
     if (picked != null) {
       _dateOfBirth = picked.toString().substring(0, 10);
       _dateController.text = _dateOfBirth;
@@ -277,9 +279,9 @@ class _FormEditState extends State<FormEdit> {
           ),
           Checkbox(
             value: !_gender,
-            onChanged: (isFemale) {
+            onChanged: (value) {
               setState(() {
-                _gender = !isFemale;
+                _gender = value;
                 client.sexo = "M";
               });
             },
@@ -292,9 +294,9 @@ class _FormEditState extends State<FormEdit> {
           SizedBox(width: 50),
           Checkbox(
             value: _gender,
-            onChanged: (isFemale) {
+            onChanged: (value) {
               setState(() {
-                _gender = !isFemale;
+                _gender = value;
                 client.sexo = "F";
                 print('GÉNERO');
               });

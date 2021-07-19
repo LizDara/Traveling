@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:traveling/src/models/region_model.dart';
+import 'package:traveling/src/models/searchTicket_model.dart';
+import 'package:traveling/src/providers/TicketProvider.dart';
 
 class DetailsPage extends StatefulWidget {
   DetailsPage({Key key}) : super(key: key);
@@ -12,10 +15,19 @@ class _DetailsPageState extends State<DetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Region> regions =
+        ModalRoute.of(context).settings.arguments as List<Region>;
+
     return Scaffold(
       key: scaffoldKey,
       body: Stack(
-        children: <Widget>[Background(), FormDetail()],
+        children: <Widget>[
+          Background(
+            departure: regions[0],
+            destination: regions[1],
+          ),
+          FormDetail(regions[0], regions[1])
+        ],
       ),
     );
   }
@@ -24,7 +36,12 @@ class _DetailsPageState extends State<DetailsPage> {
 class Background extends StatelessWidget {
   const Background({
     Key key,
+    this.departure,
+    this.destination,
   }) : super(key: key);
+
+  final Region departure;
+  final Region destination;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +54,7 @@ class Background extends StatelessWidget {
             children: <Widget>[
               _createImage(),
               _createName(),
-              _createFullName()
+              _createFullName(context)
             ],
           ),
         ),
@@ -89,7 +106,7 @@ class Background extends StatelessWidget {
     return Row(
       children: <Widget>[
         Text(
-          'DHK',
+          departure.isoRegion,
           style: TextStyle(
             fontSize: 34,
             fontWeight: FontWeight.w500,
@@ -100,7 +117,7 @@ class Background extends StatelessWidget {
           child: Container(),
         ),
         Text(
-          'SIN',
+          destination.isoRegion,
           style: TextStyle(
             fontSize: 34,
             fontWeight: FontWeight.w500,
@@ -111,11 +128,11 @@ class Background extends StatelessWidget {
     );
   }
 
-  Widget _createFullName() {
+  Widget _createFullName(BuildContext context) {
     return Row(
       children: <Widget>[
         Text(
-          'Dhaka, Bangladesh',
+          departure.name.replaceAll(new RegExp(r' Department'), ''),
           style: TextStyle(
             color: Colors.white70,
             fontWeight: FontWeight.bold,
@@ -125,7 +142,7 @@ class Background extends StatelessWidget {
           child: Container(),
         ),
         Text(
-          'Changi, Singapore',
+          destination.name.replaceAll(new RegExp(r' Department'), ''),
           style: TextStyle(
             color: Colors.white70,
             fontWeight: FontWeight.bold,
@@ -137,12 +154,17 @@ class Background extends StatelessWidget {
 }
 
 class FormDetail extends StatefulWidget {
+  const FormDetail(this.departure, this.destination);
+  final Region departure;
+  final Region destination;
   @override
   _FormDetailState createState() => _FormDetailState();
 }
 
 class _FormDetailState extends State<FormDetail> {
   final formKey = GlobalKey<FormState>();
+  final SearchTicket searchTicket = new SearchTicket();
+  final TicketProvider ticketProvider = new TicketProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +178,7 @@ class _FormDetailState extends State<FormDetail> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 2 / 7,
               ),
-              FlightDetails(),
+              FlightDetails(searchTicket),
               SizedBox(
                 height: 25,
               ),
@@ -183,17 +205,35 @@ class _FormDetailState extends State<FormDetail> {
                   borderRadius: BorderRadius.circular(8)),
               color: Color.fromRGBO(6, 6, 6, 1),
               textColor: Colors.white,
-              onPressed: () => Navigator.pushNamed(context, 'ticket')),
+              onPressed: () => _searchTickets(context)),
         )),
       ],
     );
   }
+
+  _searchTickets(BuildContext context) {
+    searchTicket.fromIsoRegion = widget.departure.isoRegion;
+    searchTicket.toIsoRegion = widget.destination.isoRegion;
+    //final resultTickets = await ticketProvider.searchTickets(searchTicket);
+    Navigator.pushNamed(context, 'flights', arguments: searchTicket);
+  }
 }
 
-class FlightDetails extends StatelessWidget {
-  const FlightDetails({
-    Key key,
-  }) : super(key: key);
+class FlightDetails extends StatefulWidget {
+  const FlightDetails(this.searchTicket);
+  final SearchTicket searchTicket;
+
+  @override
+  _FlightDetailsState createState() => _FlightDetailsState();
+}
+
+class _FlightDetailsState extends State<FlightDetails> {
+  bool isRoundTrip = false;
+  String departureDate = '26 de Marzo 2020, 19:45';
+  String destinationDate = '30 de Marzo 2020, 13:30';
+  String seatClass = 'Ejecutivo';
+  List<String> options = ['Ejecutivo', 'Económico'];
+  int passengers = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -261,8 +301,13 @@ class FlightDetails extends StatelessWidget {
         Container(
           child: Switch(
               activeColor: Color.fromRGBO(6, 6, 6, 1),
-              value: true,
-              onChanged: (value) {}),
+              value: isRoundTrip,
+              onChanged: (value) {
+                setState(() {
+                  isRoundTrip = value;
+                  widget.searchTicket.roundTrip = value;
+                });
+              }),
         ),
       ],
     );
@@ -278,22 +323,26 @@ class FlightDetails extends StatelessWidget {
               Icons.trip_origin,
               color: Color.fromRGBO(6, 6, 6, 1),
             ),
-            Image(
-              image: AssetImage('assets/line.png'),
-              height: 20,
-            ),
+            (isRoundTrip)
+                ? Image(
+                    image: AssetImage('assets/line.png'),
+                    height: 20,
+                  )
+                : Container(),
           ],
         ),
-        SizedBox(
-          width: 5,
-        ),
+        (isRoundTrip)
+            ? SizedBox(
+                width: 5,
+              )
+            : Container(),
         Container(
           padding: EdgeInsets.symmetric(vertical: 2),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                '26 de Marzo 2020, 19:45',
+                departureDate,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               Text(
@@ -311,64 +360,155 @@ class FlightDetails extends StatelessWidget {
         ),
         Container(
           margin: EdgeInsets.symmetric(vertical: 8),
-          width: 8,
-          height: 8,
+          clipBehavior: Clip.antiAlias,
+          width: 14,
+          height: 14,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(180), color: Colors.black26),
+          child: FlatButton(
+            onPressed: () {
+              FocusScope.of(context).requestFocus(new FocusNode());
+              _selectDate(context, true);
+            },
+            child: null,
+          ),
         )
       ],
     );
   }
 
+  _selectDate(BuildContext context, bool isDeparture) async {
+    DateTime now = new DateTime.now();
+    DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: new DateTime(now.year),
+      firstDate: new DateTime(now.year),
+      lastDate: new DateTime(now.year + 1),
+      locale: Locale('es', 'ES'),
+    );
+    if (picked != null) {
+      setState(() {
+        if (isDeparture) {
+          departureDate = picked.toString().substring(0, 10);
+          widget.searchTicket.fromDateRange =
+              picked.toString().substring(0, 10);
+        } else {
+          destinationDate = picked.toString().substring(0, 10);
+          widget.searchTicket.toDateRange = picked.toString().substring(0, 10);
+        }
+      });
+
+      _selectTime(context, isDeparture);
+    }
+  }
+
+  _selectTime(BuildContext context, bool isDeparture) async {
+    TimeOfDay now = new TimeOfDay.now();
+    TimeOfDay picked = await showTimePicker(context: context, initialTime: now);
+    if (picked != null) {
+      setState(() {
+        if (isDeparture) {
+          departureDate += ' ' +
+              ((picked.hour < 10)
+                  ? '0' + picked.hour.toString()
+                  : picked.hour.toString()) +
+              ':' +
+              ((picked.minute < 10)
+                  ? '0' + picked.minute.toString()
+                  : picked.minute.toString()) +
+              ':00';
+          widget.searchTicket.fromTimeRange = ((picked.hour < 10)
+                  ? '0' + picked.hour.toString()
+                  : picked.hour.toString()) +
+              ':' +
+              ((picked.minute < 10)
+                  ? '0' + picked.minute.toString()
+                  : picked.minute.toString()) +
+              ':00';
+        } else {
+          destinationDate += ' ' +
+              ((picked.hour < 10)
+                  ? '0' + picked.hour.toString()
+                  : picked.hour.toString()) +
+              ':' +
+              ((picked.minute < 10)
+                  ? '0' + picked.minute.toString()
+                  : picked.minute.toString()) +
+              ':00';
+          widget.searchTicket.toTimeRange = ((picked.hour < 10)
+                  ? '0' + picked.hour.toString()
+                  : picked.hour.toString()) +
+              ':' +
+              ((picked.minute < 10)
+                  ? '0' + picked.minute.toString()
+                  : picked.minute.toString()) +
+              ':00';
+        }
+      });
+    }
+  }
+
   Widget _createReturn() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Column(
-          children: <Widget>[
-            Icon(
-              Icons.card_travel,
-              color: Color.fromRGBO(6, 6, 6, 1),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-          ],
-        ),
-        SizedBox(
-          width: 5,
-        ),
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 2),
-          child: Column(
+    return (isRoundTrip)
+        ? Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                '30 de Marzo 2020, 13:30',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              Column(
+                children: <Widget>[
+                  Icon(
+                    Icons.card_travel,
+                    color: Color.fromRGBO(6, 6, 6, 1),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
               ),
-              Text(
-                'LLEGADA',
-                style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.black26,
-                    fontWeight: FontWeight.bold),
+              SizedBox(
+                width: 5,
               ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 2),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      destinationDate,
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      'LLEGADA',
+                      style: TextStyle(
+                          fontSize: 10,
+                          color: Colors.black26,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                clipBehavior: Clip.antiAlias,
+                width: 14,
+                height: 14,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(180),
+                    color: Colors.black26),
+                child: FlatButton(
+                  onPressed: () {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                    _selectDate(context, false);
+                  },
+                  child: null,
+                ),
+              )
             ],
-          ),
-        ),
-        Expanded(
-          child: Container(),
-        ),
-        Container(
-          margin: EdgeInsets.symmetric(vertical: 8),
-          width: 8,
-          height: 8,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(180), color: Colors.black26),
-        )
-      ],
-    );
+          )
+        : Container();
   }
 
   Widget _createClass() {
@@ -395,7 +535,7 @@ class FlightDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'Ejecutivo',
+                seatClass,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               Text(
@@ -413,13 +553,66 @@ class FlightDetails extends StatelessWidget {
         ),
         Container(
           margin: EdgeInsets.symmetric(vertical: 8),
-          width: 8,
-          height: 8,
+          clipBehavior: Clip.antiAlias,
+          width: 14,
+          height: 14,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(180), color: Colors.black26),
+          child: FlatButton(
+            onPressed: () => _showSeatClass(context),
+            child: null,
+          ),
         )
       ],
     );
+  }
+
+  _showSeatClass(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Clase'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text('Seleccione el tipo de clase.'),
+                _createClassList()
+              ],
+            ),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('Listo'),
+              ),
+            ],
+          );
+        });
+  }
+
+  Widget _createClassList() {
+    return DropdownButton(
+        value: seatClass,
+        items: _getOptions(),
+        onChanged: (opt) {
+          setState(() {
+            seatClass = opt;
+            print(opt);
+          });
+        });
+  }
+
+  List<DropdownMenuItem<String>> _getOptions() {
+    List<DropdownMenuItem<String>> list = new List();
+    options.forEach((option) {
+      list.add(DropdownMenuItem(
+        child: Text(option),
+        value: option,
+      ));
+    });
+    return list;
   }
 
   Widget _createPassenger() {
@@ -446,7 +639,8 @@ class FlightDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                '2 Personas',
+                passengers.toString() +
+                    ((passengers == 1) ? ' Persona' : ' Personas'),
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               Text(
@@ -477,7 +671,14 @@ class FlightDetails extends StatelessWidget {
                   '‒',
                   style: TextStyle(fontSize: 20),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  if (passengers > 1) {
+                    setState(() {
+                      passengers--;
+                      widget.searchTicket.travelersNumbers = passengers;
+                    });
+                  }
+                },
               ),
             )
           ],
@@ -497,7 +698,14 @@ class FlightDetails extends StatelessWidget {
                   '+',
                   style: TextStyle(fontSize: 20),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  if (passengers < 10) {
+                    setState(() {
+                      passengers++;
+                      widget.searchTicket.travelersNumbers = passengers;
+                    });
+                  }
+                },
               ),
             )
           ],

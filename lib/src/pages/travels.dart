@@ -164,7 +164,7 @@ class _TicketsState extends State<Tickets> {
               itemCount: reservations.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 30),
+                  margin: EdgeInsets.all(10),
                   padding: EdgeInsets.symmetric(vertical: 20),
                   decoration: BoxDecoration(
                       border: Border(
