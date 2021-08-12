@@ -178,7 +178,11 @@ class _FormDetailState extends State<FormDetail> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 2 / 7,
               ),
-              FlightDetails(searchTicket),
+              FlightDetails(
+                searchTicket: searchTicket,
+                departure: widget.departure,
+                destination: widget.destination,
+              ),
               SizedBox(
                 height: 25,
               ),
@@ -214,14 +218,21 @@ class _FormDetailState extends State<FormDetail> {
   _searchTickets(BuildContext context) {
     searchTicket.fromIsoRegion = widget.departure.isoRegion;
     searchTicket.toIsoRegion = widget.destination.isoRegion;
-    //final resultTickets = await ticketProvider.searchTickets(searchTicket);
-    Navigator.pushNamed(context, 'flights', arguments: searchTicket);
+    searchTicket.fromName = widget.departure.name;
+    searchTicket.toName = widget.destination.name;
+    Navigator.pushNamed(context, 'offers', arguments: searchTicket);
   }
 }
 
 class FlightDetails extends StatefulWidget {
-  const FlightDetails(this.searchTicket);
+  const FlightDetails({
+    this.searchTicket,
+    this.departure,
+    this.destination,
+  });
   final SearchTicket searchTicket;
+  final Region departure;
+  final Region destination;
 
   @override
   _FlightDetailsState createState() => _FlightDetailsState();
@@ -379,13 +390,31 @@ class _FlightDetailsState extends State<FlightDetails> {
 
   _selectDate(BuildContext context, bool isDeparture) async {
     DateTime now = new DateTime.now();
-    DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: new DateTime(now.year),
-      firstDate: new DateTime(now.year),
-      lastDate: new DateTime(now.year + 1),
-      locale: Locale('es', 'ES'),
-    );
+    DateTime picked;
+    if (widget.departure.isoCountry.length > 4) {
+      final dateTime1 = widget.departure.isoCountry.split('T');
+      final date1 = dateTime1[0].split('-');
+      final dateTime2 = widget.destination.isoCountry.split('T');
+      final date2 = dateTime2[0].split('-');
+      picked = await showDatePicker(
+        context: context,
+        initialDate: new DateTime(
+            int.parse(date1[0]), int.parse(date1[1]), int.parse(date1[2])),
+        firstDate: new DateTime(
+            int.parse(date1[0]), int.parse(date1[1]), int.parse(date1[2])),
+        lastDate: new DateTime(
+            int.parse(date2[0]), int.parse(date2[1]), int.parse(date2[2])),
+        locale: Locale('es', 'ES'),
+      );
+    } else {
+      picked = await showDatePicker(
+        context: context,
+        initialDate: new DateTime(now.year),
+        firstDate: new DateTime(now.year),
+        lastDate: new DateTime(now.year + 1),
+        locale: Locale('es', 'ES'),
+      );
+    }
     if (picked != null) {
       setState(() {
         if (isDeparture) {

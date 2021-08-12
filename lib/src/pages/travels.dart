@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:traveling/src/objects/reservation.dart';
+import 'package:traveling/src/models/itinerary_model.dart';
+import 'package:traveling/src/models/reservationTravel_model.dart';
+import 'package:traveling/src/providers/TravelProvider.dart';
 
 class TravelsPage extends StatelessWidget {
   const TravelsPage({Key key}) : super(key: key);
@@ -7,8 +9,12 @@ class TravelsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(149, 86, 135, 1),
       body: Stack(
-        children: <Widget>[Background(), Tickets()],
+        children: <Widget>[
+          Background(),
+          Tickets(),
+        ],
       ),
     );
   }
@@ -24,6 +30,7 @@ class Background extends StatelessWidget {
     return Stack(
       children: <Widget>[
         _createBackground(),
+        _createTitle(context),
         _createImage(),
       ],
     );
@@ -33,13 +40,23 @@ class Background extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: double.infinity,
+      color: Colors.white54,
+    );
+  }
+
+  Widget _createTitle(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height * 2 / 7,
       decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
         gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
               Color.fromRGBO(89, 72, 119, 1), //594877
-              Color.fromRGBO(149, 86, 135, 1)
+              Color.fromRGBO(149, 86, 135, 1),
             ]),
       ),
     );
@@ -49,10 +66,14 @@ class Background extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
+              Text(
+                'My flights',
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+              ),
               Expanded(child: Container()),
               Container(
                 height: 70,
@@ -64,13 +85,6 @@ class Background extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
-            height: 16,
-          ),
-          Text(
-            'My flights',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
-          )
         ],
       ),
     );
@@ -85,231 +99,286 @@ class Tickets extends StatefulWidget {
 }
 
 class _TicketsState extends State<Tickets> {
-  final List<Reservation> reservations = //new List();
-      [
-    new Reservation(
-        from: 'Botswana',
-        to: 'Bermudas',
-        departure: 'TBS',
-        destination: 'BER',
-        time: '3h 40m',
-        departureDate: 'Ene 29',
-        destinationDate: 'Ene 30',
-        departureHour: '20:00',
-        destinationHour: '01:00',
-        price: '226',
-        flight: 'KC89',
-        typeClass: 'Ejecutivo',
-        isExpanded: false),
-    new Reservation(
-        from: 'Dhaka',
-        to: 'Singapore',
-        departure: 'DHK',
-        destination: 'SIN',
-        time: '6h 10m',
-        departureDate: 'Mar 26',
-        destinationDate: 'Mar 27',
-        departureHour: '19:45',
-        destinationHour: '01:55',
-        price: '695',
-        flight: 'CK88',
-        typeClass: 'Ejecutivo',
-        isExpanded: false),
-    new Reservation(
-        from: 'Botswana',
-        to: 'Bermudas',
-        departure: 'TBS',
-        destination: 'BER',
-        time: '3h 40m',
-        departureDate: 'Ene 29',
-        destinationDate: 'Ene 30',
-        departureHour: '20:00',
-        destinationHour: '01:00',
-        price: '226',
-        flight: 'KC89',
-        typeClass: 'Ejecutivo',
-        isExpanded: false),
-    new Reservation(
-        from: 'Dhaka',
-        to: 'Singapore',
-        departure: 'DHK',
-        destination: 'SIN',
-        time: '6h 10m',
-        departureDate: 'Mar 26',
-        destinationDate: 'Mar 27',
-        departureHour: '19:45',
-        destinationHour: '01:55',
-        price: '695',
-        flight: 'CK88',
-        typeClass: 'Ejecutivo',
-        isExpanded: false),
-  ];
+  final TravelProvider travelProvider = new TravelProvider();
 
   @override
   Widget build(BuildContext context) {
-    return (reservations.length == 0)
-        ? Center(
-            child: Text(
-              'No hay Boletos.',
-              style: TextStyle(color: Colors.black54, fontSize: 16),
-            ),
-          )
-        : Container(
-            margin:
-                EdgeInsets.only(top: MediaQuery.of(context).size.height / 4),
-            decoration: BoxDecoration(
-                color: Colors.white60,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
-            child: ListView.builder(
-              itemCount: reservations.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  margin: EdgeInsets.all(10),
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(
-                              color: Color.fromRGBO(210, 155, 134, 0.3)))),
-                  child: Container(
-                    child: Row(
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              reservations[index].departure,
-                              style: TextStyle(
-                                fontSize: 28,
-                                color: Color.fromRGBO(210, 155, 134, 0.9),
-                              ),
+    return FutureBuilder(
+      future: travelProvider.getTravels(),
+      builder: (BuildContext context,
+          AsyncSnapshot<List<ReservationTravel>> snapshot) {
+        if (snapshot.hasData) {
+          final travels = snapshot.data;
+          return (travels.length == 0)
+              ? Center(
+                  child: Text(
+                    'No hay Boletos.',
+                    style: TextStyle(color: Colors.black54, fontSize: 16),
+                  ),
+                )
+              : Container(
+                  child: ListView.builder(
+                    itemCount: travels.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        margin: (index == 0)
+                            ? EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height / 8,
+                                bottom: 10,
+                                left: 24,
+                                right: 24)
+                            : EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 10),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            color: Colors.white,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 24),
+                            child: Column(
+                              children: <Widget>[
+                                _createInformation(
+                                    travels[index].itinerarios[0]),
+                                (travels[index].itinerarios.length > 1)
+                                    ? Container(
+                                        margin: EdgeInsets.all(10),
+                                        child: Image(
+                                          image: AssetImage(
+                                              'assets/line_light.png'),
+                                          fit: BoxFit.fill,
+                                        ),
+                                      )
+                                    : Container(),
+                                (travels[index].itinerarios.length > 1)
+                                    ? _createInformation(
+                                        travels[index].itinerarios[1])
+                                    : Container(),
+                                Container(
+                                  margin: EdgeInsets.all(10),
+                                  child: Image(
+                                    image: AssetImage('assets/line_light.png'),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      'Precio: ',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.black45,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    Text(
+                                      'BOB ' + travels[index].precio,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500),
+                                    )
+                                  ],
+                                )
+                              ],
                             ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            Text(
-                              reservations[index].from,
-                              style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color.fromRGBO(6, 6, 6, 0.7)),
-                            ),
-                            SizedBox(
-                              height: 28,
-                            ),
-                            Text(
-                              'FECHA',
-                              style: TextStyle(
-                                  fontSize: 11,
-                                  color: Color.fromRGBO(6, 6, 6, 0.55),
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              reservations[index].departureDate +
-                                  ' ' +
-                                  reservations[index].departureHour,
-                              style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color.fromRGBO(6, 6, 6, 0.7)),
-                            ),
-                          ],
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: <Widget>[
-                              Icon(
-                                Icons.flight_takeoff,
-                                color: Color.fromRGBO(210, 155, 134, 0.9),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                reservations[index].time,
-                                style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black54),
-                              ),
-                            ],
                           ),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            Text(
-                              reservations[index].destination,
-                              style: TextStyle(
-                                fontSize: 28,
-                                color: Color.fromRGBO(210, 155, 134, 0.9),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            Text(
-                              reservations[index].to,
-                              style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color.fromRGBO(6, 6, 6, 0.7)),
-                            ),
-                            SizedBox(
-                              height: 28,
-                            ),
-                            Text(
-                              'NÚMERO DE VUELO',
-                              style: TextStyle(
-                                  fontSize: 11,
-                                  color: Color.fromRGBO(6, 6, 6, 0.55),
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              reservations[index].flight,
-                              style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color.fromRGBO(6, 6, 6, 0.7)),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 );
-                /*return ExpansionPanelList(
-            animationDuration: Duration(seconds: 1),
-            children: [
-              ExpansionPanel(
-                headerBuilder: (BuildContext context, bool isExpanded) {
-                  return Container(
-                    padding: EdgeInsets.all(10),
-                    child: Text(reservations[index].from +
-                        ' ' +
-                        reservations[index].to),
-                  );
-                },
-                body: Container(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    children: <Widget>[
-                      Text(reservations[index].departureDate),
-                      Text(reservations[index].destinationDate)
-                    ],
-                  ),
-                ),
-                isExpanded: reservations[index].isExpanded,
+        } else {
+          return Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.black54),
               ),
-            ],
-            expansionCallback: (int item, bool isExpanded) {
-              setState(() {
-                reservations[index].isExpanded =
-                    !reservations[index].isExpanded;
-              });
-            },
-          );*/
-              },
             ),
           );
+        }
+      },
+    );
+  }
+
+  Widget _createInformation(Itinerary itinerary) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Row(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Icon(
+                    Icons.near_me,
+                    color: Color.fromRGBO(89, 72, 119, 1),
+                  ),
+                  Image(
+                    image: AssetImage('assets/line.png'),
+                    color: Color.fromRGBO(89, 72, 119, 1),
+                    height: 20,
+                  ),
+                  Icon(
+                    Icons.room,
+                    color: Color.fromRGBO(89, 72, 119, 1),
+                  ),
+                ],
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      itinerary.lugarSalida
+                          .replaceAll(RegExp(' Department'), ''),
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      _getDateTime(itinerary.fechaSalida),
+                      style: TextStyle(
+                          fontSize: 11,
+                          color: Colors.black38,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      itinerary.lugarLlegada
+                          .replaceAll(RegExp(' Department'), ''),
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      _getDateTime(itinerary.fechaLlegada),
+                      style: TextStyle(
+                          fontSize: 11,
+                          color: Colors.black38,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+        Container(
+          height: 80,
+          width: 1.2,
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          color: Colors.black26,
+        ),
+        Expanded(
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Código Salida: ',
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black45,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    itinerary.salidaIataCodigo,
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  )
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Código Llegada: ',
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black45,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    itinerary.llegadaIataCodigo,
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  )
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Duración: ',
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black45,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    _getDuration(itinerary.duracion),
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _getDuration(String duration) {
+    duration.replaceAll(new RegExp(r'P'), '');
+    List<String> separateDuration = duration.split('T');
+    String result = separateDuration[1].replaceAll(new RegExp(r'H'), 'h ');
+    return result.replaceAll(new RegExp(r'M'), 'm ');
+  }
+
+  String _getDateTime(String dateTime) {
+    if (dateTime.length == 0) return "";
+    List<String> separateDateTime = dateTime.split('T');
+    List<String> date = separateDateTime[0].split('-');
+    List<String> time = separateDateTime[1].split(':');
+    String result = '';
+    switch (date[1]) {
+      case "01":
+        result += 'Ene ';
+        break;
+      case "02":
+        result += 'Feb ';
+        break;
+      case "03":
+        result += 'Mar ';
+        break;
+      case "04":
+        result += 'Abr ';
+        break;
+      case "05":
+        result += 'May ';
+        break;
+      case "06":
+        result += 'Jun ';
+        break;
+      case "07":
+        result += 'Jul ';
+        break;
+      case "08":
+        result += 'Ago ';
+        break;
+      case "09":
+        result += 'Sep ';
+        break;
+      case "10":
+        result += 'Oct ';
+        break;
+      case "11":
+        result += 'Nov ';
+        break;
+      case "12":
+        result += 'Dic ';
+        break;
+    }
+    result += date[2] + ', ' + time[0] + ':' + time[1];
+    return result;
   }
 }

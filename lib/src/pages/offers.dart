@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:traveling/src/models/flightOffer_model.dart';
 import 'package:traveling/src/models/searchTicket_model.dart';
 import 'package:traveling/src/models/ticketList_model.dart';
 import 'package:traveling/src/providers/TicketProvider.dart';
 
-class FlightsPage extends StatelessWidget {
+class OffersPage extends StatelessWidget {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -16,7 +17,7 @@ class FlightsPage extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           Background(),
-          FlightsList(searchTicket),
+          FlightsList(searchTicket, scaffoldKey),
         ],
       ),
     );
@@ -47,8 +48,9 @@ class Background extends StatelessWidget {
 }
 
 class FlightsList extends StatefulWidget {
-  FlightsList(this.searchTicket);
+  FlightsList(this.searchTicket, this.scaffoldKey);
   final SearchTicket searchTicket;
+  final scaffoldKey;
 
   @override
   _FlightsListState createState() => _FlightsListState();
@@ -98,8 +100,13 @@ class _FlightsListState extends State<FlightsList> {
                                   Row(
                                     children: <Widget>[
                                       Text(
-                                        'Ver Detalles',
-                                        style: TextStyle(fontSize: 15),
+                                        ticketList[index]
+                                            .travelerPricings[0]
+                                            .fareDetailsBySegment[0]
+                                            .cabin,
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500),
                                       ),
                                       Expanded(child: Container()),
                                       Container(
@@ -110,7 +117,7 @@ class _FlightsListState extends State<FlightsList> {
                                                 BorderRadius.circular(14)),
                                         child: FlatButton(
                                           child: Text(
-                                            r'BOB ' +
+                                            'BOB ' +
                                                 ticketList[index]
                                                     .price
                                                     .grandTotal +
@@ -120,10 +127,8 @@ class _FlightsListState extends State<FlightsList> {
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 10),
                                           ),
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pushReplacementNamed('ticket');
-                                          },
+                                          onPressed: () => _confirmTicket(
+                                              context, ticketList[index]),
                                         ),
                                       )
                                     ],
@@ -348,5 +353,31 @@ class _FlightsListState extends State<FlightsList> {
     List<String> separateDuration = duration.split('T');
     String result = separateDuration[1].replaceAll(new RegExp(r'H'), 'h ');
     return result.replaceAll(new RegExp(r'M'), 'm ');
+  }
+
+  _confirmTicket(BuildContext context, TicketList ticketList) async {
+    FlightOffer flightOffer = new FlightOffer();
+    List<TicketList> tickets = [
+      ticketList,
+    ];
+    Data data = new Data(type: 'flight-offers-pricing', flightOffers: tickets);
+    flightOffer.data = data;
+
+    final confirmOffer = await ticketProvider.confirmTicket(flightOffer);
+    if (confirmOffer != null) {
+      Navigator.of(context)
+          .pushNamed('ticket', arguments: [confirmOffer, widget.searchTicket]);
+    } else {
+      _showMessage(
+          'No se pudo encontrar la oferta seleccionada. Inténtelo nuevamente por favor.');
+    }
+  }
+
+  _showMessage(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      duration: Duration(milliseconds: 1500),
+    );
+    widget.scaffoldKey.currentState.showSnackBar(snackBar);
   }
 }

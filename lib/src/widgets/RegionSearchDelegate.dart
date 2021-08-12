@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:traveling/src/models/region_model.dart';
 import 'package:traveling/src/models/searchRegion_model.dart';
 import 'package:traveling/src/providers/RegionProvider.dart';

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:traveling/src/models/region_model.dart';
 import 'package:traveling/src/models/regionsList_model.dart';

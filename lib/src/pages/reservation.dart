@@ -197,7 +197,7 @@ class _FormReservationState extends State<FormReservation> {
   _getDestinationRegion(BuildContext context) async {
     destination =
         await showSearch(context: context, delegate: RegionSearchDelegate());
-    destinationController.text = departure.name;
+    destinationController.text = destination.name;
   }
 
   Widget _createGoButton(BuildContext context) {

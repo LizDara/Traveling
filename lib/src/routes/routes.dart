@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:traveling/src/pages/account.dart';
 import 'package:traveling/src/pages/changePassword.dart';
 import 'package:traveling/src/pages/details.dart';
-import 'package:traveling/src/pages/flights.dart';
+import 'package:traveling/src/pages/flight.dart';
+import 'package:traveling/src/pages/offers.dart';
 import 'package:traveling/src/pages/home.dart';
 import 'package:traveling/src/pages/notifications.dart';
 import 'package:traveling/src/pages/profile.dart';
@@ -31,6 +32,7 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
     'password': (BuildContext context) => ChangePasswordPage(),
     'travels': (BuildContext context) => TravelsPage(),
     'notifications': (BuildContext context) => NotificationsPage(),
-    'flights': (BuildContext context) => FlightsPage(),
+    'offers': (BuildContext context) => OffersPage(),
+    'flight': (BuildContext context) => FlightPage(),
   };
 }

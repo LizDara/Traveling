@@ -45,8 +45,8 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
-  final List<Reservation> reservations = //new List();
-      [
+  final List<Reservation> reservations = new List();
+  /*[
     new Reservation(
         from: 'Botswana',
         to: 'Bermudas',
@@ -159,7 +159,7 @@ class _NotificationsState extends State<Notifications> {
         flight: 'CK88',
         typeClass: 'Ejecutivo',
         isExpanded: false),
-  ];
+  ];*/
 
   @override
   Widget build(BuildContext context) {
