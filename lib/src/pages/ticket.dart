@@ -7,12 +7,12 @@ import 'package:traveling/src/models/traveler_model.dart';
 import 'package:traveling/src/providers/TicketProvider.dart';
 
 class TicketPage extends StatelessWidget {
-  TicketPage({Key key}) : super(key: key);
+  TicketPage({Key? key}) : super(key: key);
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    final dataResult = ModalRoute.of(context).settings.arguments as List;
+    final dataResult = ModalRoute.of(context)!.settings.arguments as List;
 
     final ConfirmOffer confirmOffer = dataResult[0] as ConfirmOffer;
     final SearchTicket searchTicket = dataResult[1] as SearchTicket;
@@ -37,8 +37,8 @@ class TicketPage extends StatelessWidget {
 
 class Background extends StatelessWidget {
   const Background({
-    Key key,
-    this.searchTicket,
+    Key? key,
+    required this.searchTicket,
   }) : super(key: key);
   final SearchTicket searchTicket;
 
@@ -105,7 +105,7 @@ class Background extends StatelessWidget {
     return Row(
       children: <Widget>[
         Text(
-          searchTicket.fromIsoRegion,
+          searchTicket.fromIsoRegion ?? '',
           style: TextStyle(
             fontSize: 34,
             fontWeight: FontWeight.w500,
@@ -116,7 +116,7 @@ class Background extends StatelessWidget {
           child: Container(),
         ),
         Text(
-          searchTicket.toIsoRegion,
+          searchTicket.toIsoRegion ?? '',
           style: TextStyle(
             fontSize: 34,
             fontWeight: FontWeight.w500,
@@ -131,7 +131,7 @@ class Background extends StatelessWidget {
     return Row(
       children: <Widget>[
         Text(
-          searchTicket.fromName.replaceAll(new RegExp(r' Department'), ''),
+          searchTicket.fromName!.replaceAll(new RegExp(r' Department'), ''),
           style: TextStyle(
             color: Colors.white70,
             fontWeight: FontWeight.bold,
@@ -141,7 +141,7 @@ class Background extends StatelessWidget {
           child: Container(),
         ),
         Text(
-          searchTicket.toName.replaceAll(new RegExp(r' Department'), ''),
+          searchTicket.toName!.replaceAll(new RegExp(r' Department'), ''),
           style: TextStyle(
             color: Colors.white70,
             fontWeight: FontWeight.bold,
@@ -153,7 +153,10 @@ class Background extends StatelessWidget {
 }
 
 class Detail extends StatefulWidget {
-  Detail({this.confirmOffer, this.searchTicket, this.scaffoldKey});
+  Detail(
+      {required this.confirmOffer,
+      required this.searchTicket,
+      this.scaffoldKey});
   final ConfirmOffer confirmOffer;
   final SearchTicket searchTicket;
   final scaffoldKey;
@@ -165,7 +168,7 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   final TicketProvider ticketProvider = new TicketProvider();
   AcceptOffer acceptOffer = new AcceptOffer();
-  List<Traveler> travelers = new List();
+  List<Traveler> travelers = [];
 
   final formKey = GlobalKey<FormState>();
 
@@ -202,7 +205,9 @@ class _DetailState extends State<Detail> {
   }
 
   _setTravelers() {
-    for (int index = 0; index < widget.searchTicket.travelersNumbers; index++) {
+    for (int index = 0;
+        index < (widget.searchTicket.travelersNumbers ?? 0);
+        index++) {
       travelers.add(new Traveler(
           id: (index + 1).toString(),
           gender: 'FEMALE',
@@ -229,8 +234,8 @@ class _DetailState extends State<Detail> {
             color: Color.fromRGBO(6, 6, 6, 1),
             textColor: Colors.white,
             onPressed: () {
-              if (!formKey.currentState.validate()) return;
-              formKey.currentState.save();
+              if (!formKey.currentState!.validate()) return;
+              formKey.currentState!.save();
               _acceptOffer(context);
             },
           ),
@@ -240,12 +245,13 @@ class _DetailState extends State<Detail> {
   }
 
   _acceptOffer(BuildContext context) async {
-    acceptOffer.data.flightOffers = widget.confirmOffer.data.flightOffers;
-    for (Itinerary itinerary in acceptOffer.data.flightOffers[0].itineraries) {
-      itinerary.duration = itinerary.segments[0].duration;
+    acceptOffer.data!.flightOffers = widget.confirmOffer.data!.flightOffers;
+    for (Itinerary itinerary
+        in (acceptOffer.data!.flightOffers![0].itineraries ?? [])) {
+      itinerary.duration = itinerary.segments![0].duration;
     }
 
-    final result = await ticketProvider.acceptTicket(acceptOffer);
+    final result = await ticketProvider.acceptTicket(acceptOffer, context);
     if (result) {
       Navigator.of(context).pushReplacementNamed('main');
     } else {
@@ -265,11 +271,11 @@ class _DetailState extends State<Detail> {
 
 class TicketDetails extends StatefulWidget {
   TicketDetails(
-      {Key key,
-      this.confirmOffer,
+      {Key? key,
+      required this.confirmOffer,
       this.formKey,
-      this.searchTicket,
-      this.acceptOffer})
+      required this.searchTicket,
+      required this.acceptOffer})
       : super(key: key);
   final SearchTicket searchTicket;
   final ConfirmOffer confirmOffer;
@@ -319,16 +325,17 @@ class _TicketDetailsState extends State<TicketDetails> {
             child: Image(image: AssetImage('assets/line_light.png')),
           ),
           FlightDetail(
-            itinerary: widget.confirmOffer.data.flightOffers[0].itineraries[0],
-            fareDetailsBySegment: widget.confirmOffer.data.flightOffers[0]
-                .travelerPricings[0].fareDetailsBySegment[0],
+            itinerary:
+                widget.confirmOffer.data!.flightOffers![0].itineraries![0],
+            fareDetailsBySegment: widget.confirmOffer.data!.flightOffers![0]
+                .travelerPricings![0].fareDetailsBySegment![0],
           ),
-          (widget.confirmOffer.data.flightOffers[0].itineraries.length > 1)
+          (widget.confirmOffer.data!.flightOffers![0].itineraries!.length > 1)
               ? SizedBox(
                   height: 28,
                 )
               : Container(),
-          (widget.confirmOffer.data.flightOffers[0].itineraries.length > 1)
+          (widget.confirmOffer.data!.flightOffers![0].itineraries!.length > 1)
               ? Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
@@ -370,12 +377,16 @@ class _TicketDetailsState extends State<TicketDetails> {
                   ],
                 )
               : Container(),
-          (widget.confirmOffer.data.flightOffers[0].itineraries.length > 1)
+          (widget.confirmOffer.data!.flightOffers![0].itineraries!.length > 1)
               ? FlightDetail(
-                  itinerary:
-                      widget.confirmOffer.data.flightOffers[0].itineraries[1],
-                  fareDetailsBySegment: widget.confirmOffer.data.flightOffers[0]
-                      .travelerPricings[0].fareDetailsBySegment[1],
+                  itinerary: widget
+                      .confirmOffer.data!.flightOffers![0].itineraries![1],
+                  fareDetailsBySegment: widget
+                      .confirmOffer
+                      .data!
+                      .flightOffers![0]
+                      .travelerPricings![0]
+                      .fareDetailsBySegment![1],
                 )
               : Container(),
           SizedBox(
@@ -449,7 +460,9 @@ class _TicketDetailsState extends State<TicketDetails> {
               ),
               Text(
                 r'BOB ' +
-                    widget.confirmOffer.data.flightOffers[0].price.grandTotal,
+                    (widget.confirmOffer.data!.flightOffers![0].price!
+                            .grandTotal ??
+                        ''),
                 style: TextStyle(
                     color: Color.fromRGBO(6, 6, 6, 1),
                     fontSize: 20,
@@ -464,7 +477,8 @@ class _TicketDetailsState extends State<TicketDetails> {
 }
 
 class FlightDetail extends StatelessWidget {
-  const FlightDetail({Key key, this.itinerary, this.fareDetailsBySegment})
+  const FlightDetail(
+      {Key? key, required this.itinerary, required this.fareDetailsBySegment})
       : super(key: key);
   final Itinerary itinerary;
   final FareDetailsBySegment fareDetailsBySegment;
@@ -491,7 +505,7 @@ class FlightDetail extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                _getDateTime(itinerary.segments[0].departure.at),
+                _getDateTime(itinerary.segments![0].departure!.at ?? ''),
                 style: TextStyle(
                     color: Color.fromRGBO(6, 6, 6, 1),
                     fontSize: 16,
@@ -511,7 +525,7 @@ class FlightDetail extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                _getDateTime(itinerary.segments[0].arrival.at),
+                _getDateTime(itinerary.segments![0].arrival!.at ?? ''),
                 style: TextStyle(
                     color: Color.fromRGBO(6, 6, 6, 1),
                     fontSize: 16,
@@ -536,7 +550,7 @@ class FlightDetail extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                itinerary.segments[0].departure.iataCode,
+                itinerary.segments![0].departure!.iataCode ?? '',
                 style: TextStyle(
                     color: Color.fromRGBO(6, 6, 6, 1),
                     fontSize: 16,
@@ -556,7 +570,7 @@ class FlightDetail extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                itinerary.segments[0].arrival.iataCode,
+                itinerary.segments![0].arrival!.iataCode ?? '',
                 style: TextStyle(
                     color: Color.fromRGBO(6, 6, 6, 1),
                     fontSize: 16,
@@ -581,7 +595,7 @@ class FlightDetail extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                itinerary.segments[0].aircraft.code,
+                itinerary.segments![0].aircraft!.code ?? '',
                 style: TextStyle(
                     color: Color.fromRGBO(6, 6, 6, 1),
                     fontSize: 16,
@@ -601,7 +615,7 @@ class FlightDetail extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                fareDetailsBySegment.cabin,
+                fareDetailsBySegment.cabin ?? '',
                 style: TextStyle(
                     color: Color.fromRGBO(6, 6, 6, 1),
                     fontSize: 16,
@@ -663,7 +677,11 @@ class FlightDetail extends StatelessWidget {
 }
 
 class ListPassengers extends StatefulWidget {
-  ListPassengers({Key key, this.formKey, this.searchTicket, this.acceptOffer})
+  ListPassengers(
+      {Key? key,
+      this.formKey,
+      required this.searchTicket,
+      required this.acceptOffer})
       : super(key: key);
   final formKey;
   final SearchTicket searchTicket;
@@ -698,31 +716,31 @@ class _ListPassengersState extends State<ListPassengers> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _createPassenger(0),
-            (widget.searchTicket.travelersNumbers >= 2)
+            (widget.searchTicket.travelersNumbers! >= 2)
                 ? _createPassenger(1)
                 : Container(),
-            (widget.searchTicket.travelersNumbers >= 3)
+            (widget.searchTicket.travelersNumbers! >= 3)
                 ? _createPassenger(2)
                 : Container(),
-            (widget.searchTicket.travelersNumbers >= 4)
+            (widget.searchTicket.travelersNumbers! >= 4)
                 ? _createPassenger(3)
                 : Container(),
-            (widget.searchTicket.travelersNumbers >= 5)
+            (widget.searchTicket.travelersNumbers! >= 5)
                 ? _createPassenger(4)
                 : Container(),
-            (widget.searchTicket.travelersNumbers >= 6)
+            (widget.searchTicket.travelersNumbers! >= 6)
                 ? _createPassenger(5)
                 : Container(),
-            (widget.searchTicket.travelersNumbers >= 7)
+            (widget.searchTicket.travelersNumbers! >= 7)
                 ? _createPassenger(6)
                 : Container(),
-            (widget.searchTicket.travelersNumbers >= 8)
+            (widget.searchTicket.travelersNumbers! >= 8)
                 ? _createPassenger(7)
                 : Container(),
-            (widget.searchTicket.travelersNumbers >= 9)
+            (widget.searchTicket.travelersNumbers! >= 9)
                 ? _createPassenger(8)
                 : Container(),
-            (widget.searchTicket.travelersNumbers >= 10)
+            (widget.searchTicket.travelersNumbers! >= 10)
                 ? _createPassenger(9)
                 : Container(),
           ],
@@ -732,7 +750,7 @@ class _ListPassengersState extends State<ListPassengers> {
   }
 
   List<DropdownMenuItem<String>> _getOptions() {
-    List<DropdownMenuItem<String>> list = new List();
+    List<DropdownMenuItem<String>> list = [];
     genders.forEach((option) {
       list.add(DropdownMenuItem(
         child: Text(option),
@@ -744,7 +762,7 @@ class _ListPassengersState extends State<ListPassengers> {
 
   _selectDate(BuildContext context, TextEditingController controller) async {
     DateTime now = new DateTime.now();
-    DateTime picked = await showDatePicker(
+    DateTime? picked = await showDatePicker(
       context: context,
       initialDate: new DateTime(now.year - 11),
       firstDate: new DateTime(now.year - 80),
@@ -766,14 +784,14 @@ class _ListPassengersState extends State<ListPassengers> {
         TextFormField(
           keyboardType: TextInputType.text,
           decoration: InputDecoration(labelText: 'Nombre'),
-          onSaved: (value) =>
-              widget.acceptOffer.data.travelers[index].name.firstName = value,
+          onSaved: (value) => widget
+              .acceptOffer.data!.travelers![index].name!.firstName = value!,
         ),
         TextFormField(
           keyboardType: TextInputType.text,
           decoration: InputDecoration(labelText: 'Apellido'),
-          onSaved: (value) =>
-              widget.acceptOffer.data.travelers[index].name.lastName = value,
+          onSaved: (value) => widget
+              .acceptOffer.data!.travelers![index].name!.lastName = value!,
         ),
         TextFormField(
           decoration: InputDecoration(labelText: 'Fecha de Nacimiento'),
@@ -783,18 +801,19 @@ class _ListPassengersState extends State<ListPassengers> {
             _selectDate(context, controllers[index]);
           },
           onSaved: (value) =>
-              widget.acceptOffer.data.travelers[index].dateOfBirth = value,
+              widget.acceptOffer.data!.travelers![index].dateOfBirth = value!,
         ),
         SizedBox(
           height: 6,
         ),
         DropdownButton(
           isExpanded: true,
-          value: widget.acceptOffer.data.travelers[index].gender,
+          value: widget.acceptOffer.data!.travelers![index].gender,
           items: _getOptions(),
           onChanged: (opt) {
             setState(() {
-              widget.acceptOffer.data.travelers[index].gender = opt;
+              widget.acceptOffer.data!.travelers![index].gender =
+                  opt.toString();
               print(opt);
             });
           },
@@ -802,14 +821,16 @@ class _ListPassengersState extends State<ListPassengers> {
         TextFormField(
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(labelText: 'Correo Electrónico'),
-          onSaved: (value) => widget
-              .acceptOffer.data.travelers[index].contact.emailAddress = value,
+          onSaved: (value) => widget.acceptOffer.data!.travelers![index]
+              .contact!.emailAddress = value!,
         ),
         TextFormField(
           keyboardType: TextInputType.number,
           decoration: InputDecoration(labelText: 'Teléfono Móvil'),
-          onSaved: (value) => widget.acceptOffer.data.travelers[index].contact
-              .phones = [new Phone(deviceType: 'MOBILE', number: value)],
+          onSaved: (value) =>
+              widget.acceptOffer.data!.travelers![index].contact!.phones = [
+            new Phone(deviceType: 'MOBILE', number: value.toString())
+          ],
         ),
         SizedBox(
           height: 20,

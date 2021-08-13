@@ -15,11 +15,11 @@ class Traveler {
     this.contact,
   });
 
-  String id;
-  String dateOfBirth;
-  Name name;
-  String gender;
-  Contact contact;
+  String? id;
+  String? dateOfBirth;
+  Name? name;
+  String? gender;
+  Contact? contact;
 
   factory Traveler.fromJson(Map<String, dynamic> json) => Traveler(
         id: json["id"],
@@ -32,9 +32,9 @@ class Traveler {
   Map<String, dynamic> toJson() => {
         "id": id,
         "dateOfBirth": dateOfBirth,
-        "name": name.toJson(),
+        "name": name!.toJson(),
         "gender": gender,
-        "contact": contact.toJson(),
+        "contact": contact!.toJson(),
       };
 }
 
@@ -44,8 +44,8 @@ class Contact {
     this.phones,
   });
 
-  String emailAddress;
-  List<Phone> phones;
+  String? emailAddress;
+  List<Phone>? phones;
 
   factory Contact.fromJson(Map<String, dynamic> json) => Contact(
         emailAddress: json["emailAddress"],
@@ -54,7 +54,7 @@ class Contact {
 
   Map<String, dynamic> toJson() => {
         "emailAddress": emailAddress,
-        "phones": List<dynamic>.from(phones.map((x) => x.toJson())),
+        "phones": List<dynamic>.from(phones!.map((x) => x.toJson())),
       };
 }
 
@@ -64,8 +64,8 @@ class Phone {
     this.number,
   });
 
-  String deviceType;
-  String number;
+  String? deviceType;
+  String? number;
 
   factory Phone.fromJson(Map<String, dynamic> json) => Phone(
         deviceType: json["deviceType"],
@@ -84,8 +84,8 @@ class Name {
     this.lastName,
   });
 
-  String firstName;
-  String lastName;
+  String? firstName;
+  String? lastName;
 
   factory Name.fromJson(Map<String, dynamic> json) => Name(
         firstName: json["firstName"],

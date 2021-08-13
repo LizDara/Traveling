@@ -13,11 +13,11 @@ class User {
     this.refreshToken,
   });
 
-  int personaId;
-  String correoElectronico;
-  String contrasena;
-  String accessToken;
-  String refreshToken;
+  int? personaId;
+  String? correoElectronico;
+  String? contrasena;
+  String? accessToken;
+  String? refreshToken;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         personaId: json["persona_id"],

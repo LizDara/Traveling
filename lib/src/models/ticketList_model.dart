@@ -23,19 +23,19 @@ class TicketList {
     this.lastTicketingDate,
   });
 
-  bool instantTicketingRequired;
-  bool nonHomogeneous;
-  bool oneWay;
-  List<Itinerary> itineraries;
-  PricingOptions pricingOptions;
-  String id;
-  String source;
-  int numberOfBookableSeats;
-  TicketListPrice price;
-  List<String> validatingAirlineCodes;
-  List<TravelerPricing> travelerPricings;
-  String type;
-  String lastTicketingDate;
+  bool? instantTicketingRequired;
+  bool? nonHomogeneous;
+  bool? oneWay;
+  List<Itinerary>? itineraries;
+  PricingOptions? pricingOptions;
+  String? id;
+  String? source;
+  int? numberOfBookableSeats;
+  TicketListPrice? price;
+  List<String>? validatingAirlineCodes;
+  List<TravelerPricing>? travelerPricings;
+  String? type;
+  String? lastTicketingDate;
 
   factory TicketList.fromJson(Map<String, dynamic> json) => TicketList(
         instantTicketingRequired: json["instantTicketingRequired"],
@@ -60,16 +60,16 @@ class TicketList {
         "instantTicketingRequired": instantTicketingRequired,
         "nonHomogeneous": nonHomogeneous,
         "oneWay": oneWay,
-        "itineraries": List<dynamic>.from(itineraries.map((x) => x.toJson())),
-        "pricingOptions": pricingOptions.toJson(),
+        "itineraries": List<dynamic>.from(itineraries!.map((x) => x.toJson())),
+        "pricingOptions": pricingOptions!.toJson(),
         "id": id,
         "source": source,
         "numberOfBookableSeats": numberOfBookableSeats,
-        "price": price.toJson(),
+        "price": price!.toJson(),
         "validatingAirlineCodes":
-            List<dynamic>.from(validatingAirlineCodes.map((x) => x)),
+            List<dynamic>.from(validatingAirlineCodes!.map((x) => x)),
         "travelerPricings":
-            List<dynamic>.from(travelerPricings.map((x) => x.toJson())),
+            List<dynamic>.from(travelerPricings!.map((x) => x.toJson())),
         "type": type,
         "lastTicketingDate": lastTicketingDate,
       };
@@ -81,8 +81,8 @@ class Itinerary {
     this.segments,
   });
 
-  String duration;
-  List<Segment> segments;
+  String? duration;
+  List<Segment>? segments;
 
   factory Itinerary.fromJson(Map<String, dynamic> json) => Itinerary(
         duration: json["duration"],
@@ -92,7 +92,7 @@ class Itinerary {
 
   Map<String, dynamic> toJson() => {
         "duration": duration,
-        "segments": List<dynamic>.from(segments.map((x) => x.toJson())),
+        "segments": List<dynamic>.from(segments!.map((x) => x.toJson())),
       };
 }
 
@@ -110,16 +110,16 @@ class Segment {
     this.numberOfStops,
   });
 
-  String duration;
-  String id;
-  bool blacklistedInEu;
-  Arrival departure;
-  Arrival arrival;
-  String number;
-  Operating operating;
-  String carrierCode;
-  Aircraft aircraft;
-  int numberOfStops;
+  String? duration;
+  String? id;
+  bool? blacklistedInEu;
+  Arrival? departure;
+  Arrival? arrival;
+  String? number;
+  Operating? operating;
+  String? carrierCode;
+  Aircraft? aircraft;
+  int? numberOfStops;
 
   factory Segment.fromJson(Map<String, dynamic> json) => Segment(
         duration: json["duration"],
@@ -138,12 +138,12 @@ class Segment {
         "duration": duration,
         "id": id,
         "blacklistedInEU": blacklistedInEu,
-        "departure": departure.toJson(),
-        "arrival": arrival.toJson(),
+        "departure": departure!.toJson(),
+        "arrival": arrival!.toJson(),
         "number": number,
-        "operating": operating.toJson(),
+        "operating": operating!.toJson(),
         "carrierCode": carrierCode,
-        "aircraft": aircraft.toJson(),
+        "aircraft": aircraft!.toJson(),
         "numberOfStops": numberOfStops,
       };
 }
@@ -153,7 +153,7 @@ class Aircraft {
     this.code,
   });
 
-  String code;
+  String? code;
 
   factory Aircraft.fromJson(Map<String, dynamic> json) => Aircraft(
         code: json["code"],
@@ -170,8 +170,8 @@ class Arrival {
     this.iataCode,
   });
 
-  String at;
-  String iataCode;
+  String? at;
+  String? iataCode;
 
   factory Arrival.fromJson(Map<String, dynamic> json) => Arrival(
         at: json["at"],
@@ -189,7 +189,7 @@ class Operating {
     this.carrierCode,
   });
 
-  String carrierCode;
+  String? carrierCode;
 
   factory Operating.fromJson(Map<String, dynamic> json) => Operating(
         carrierCode: json["carrierCode"],
@@ -209,11 +209,11 @@ class TicketListPrice {
     this.total,
   });
 
-  String base;
-  List<Fee> fees;
-  String grandTotal;
-  String currency;
-  String total;
+  String? base;
+  List<Fee>? fees;
+  String? grandTotal;
+  String? currency;
+  String? total;
 
   factory TicketListPrice.fromJson(Map<String, dynamic> json) =>
       TicketListPrice(
@@ -226,7 +226,7 @@ class TicketListPrice {
 
   Map<String, dynamic> toJson() => {
         "base": base,
-        "fees": List<dynamic>.from(fees.map((x) => x.toJson())),
+        "fees": List<dynamic>.from(fees!.map((x) => x.toJson())),
         "grandTotal": grandTotal,
         "currency": currency,
         "total": total,
@@ -239,8 +239,8 @@ class Fee {
     this.amount,
   });
 
-  String type;
-  String amount;
+  String? type;
+  String? amount;
 
   factory Fee.fromJson(Map<String, dynamic> json) => Fee(
         type: json["type"],
@@ -259,8 +259,8 @@ class PricingOptions {
     this.includedCheckedBagsOnly,
   });
 
-  List<String> fareType;
-  bool includedCheckedBagsOnly;
+  List<String>? fareType;
+  bool? includedCheckedBagsOnly;
 
   factory PricingOptions.fromJson(Map<String, dynamic> json) => PricingOptions(
         fareType: List<String>.from(json["fareType"].map((x) => x)),
@@ -268,7 +268,7 @@ class PricingOptions {
       );
 
   Map<String, dynamic> toJson() => {
-        "fareType": List<dynamic>.from(fareType.map((x) => x)),
+        "fareType": List<dynamic>.from(fareType!.map((x) => x)),
         "includedCheckedBagsOnly": includedCheckedBagsOnly,
       };
 }
@@ -282,11 +282,11 @@ class TravelerPricing {
     this.price,
   });
 
-  List<FareDetailsBySegment> fareDetailsBySegment;
-  String travelerId;
-  String fareOption;
-  String travelerType;
-  TravelerPricingPrice price;
+  List<FareDetailsBySegment>? fareDetailsBySegment;
+  String? travelerId;
+  String? fareOption;
+  String? travelerType;
+  TravelerPricingPrice? price;
 
   factory TravelerPricing.fromJson(Map<String, dynamic> json) =>
       TravelerPricing(
@@ -301,11 +301,11 @@ class TravelerPricing {
 
   Map<String, dynamic> toJson() => {
         "fareDetailsBySegment":
-            List<dynamic>.from(fareDetailsBySegment.map((x) => x.toJson())),
+            List<dynamic>.from(fareDetailsBySegment!.map((x) => x.toJson())),
         "travelerId": travelerId,
         "fareOption": fareOption,
         "travelerType": travelerType,
-        "price": price.toJson(),
+        "price": price!.toJson(),
       };
 }
 
@@ -318,11 +318,11 @@ class FareDetailsBySegment {
     this.includedCheckedBags,
   });
 
-  String segmentId;
-  String cabin;
-  String fareBasis;
-  String fareDetailsBySegmentClass;
-  IncludedCheckedBags includedCheckedBags;
+  String? segmentId;
+  String? cabin;
+  String? fareBasis;
+  String? fareDetailsBySegmentClass;
+  IncludedCheckedBags? includedCheckedBags;
 
   factory FareDetailsBySegment.fromJson(Map<String, dynamic> json) =>
       FareDetailsBySegment(
@@ -339,7 +339,7 @@ class FareDetailsBySegment {
         "cabin": cabin,
         "fareBasis": fareBasis,
         "class": fareDetailsBySegmentClass,
-        "includedCheckedBags": includedCheckedBags.toJson(),
+        "includedCheckedBags": includedCheckedBags!.toJson(),
       };
 }
 
@@ -349,8 +349,8 @@ class IncludedCheckedBags {
     this.weightUnit,
   });
 
-  int weight;
-  String weightUnit;
+  int? weight;
+  String? weightUnit;
 
   factory IncludedCheckedBags.fromJson(Map<String, dynamic> json) =>
       IncludedCheckedBags(
@@ -371,9 +371,9 @@ class TravelerPricingPrice {
     this.currency,
   });
 
-  String total;
-  String base;
-  String currency;
+  String? total;
+  String? base;
+  String? currency;
 
   factory TravelerPricingPrice.fromJson(Map<String, dynamic> json) =>
       TravelerPricingPrice(

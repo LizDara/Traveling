@@ -18,16 +18,16 @@ class Segment {
     this.itinerarioId,
   });
 
-  int id;
-  String salidaIataCodigo;
-  String salidaHora;
-  String llegadaIataCodigo;
-  String llegadaTerminal;
-  String llegadaHora;
-  String codigoAerolinea;
-  String duracion;
-  String codigoVuelo;
-  int itinerarioId;
+  int? id;
+  String? salidaIataCodigo;
+  String? salidaHora;
+  String? llegadaIataCodigo;
+  String? llegadaTerminal;
+  String? llegadaHora;
+  String? codigoAerolinea;
+  String? duracion;
+  String? codigoVuelo;
+  int? itinerarioId;
 
   factory Segment.fromJson(Map<String, dynamic> json) => Segment(
         id: json["id"],

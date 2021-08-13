@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:traveling/src/models/client_model.dart';
 import 'package:traveling/src/models/user_model.dart';
-import 'package:traveling/src/preferences/user_preferences.dart';
 import 'package:traveling/src/providers/ClientProvider.dart';
 import 'package:traveling/src/providers/UserProvider.dart';
 
 class AccountPage extends StatefulWidget {
-  const AccountPage({Key key}) : super(key: key);
+  const AccountPage({Key? key}) : super(key: key);
 
   @override
   _AccountPageState createState() => _AccountPageState();
@@ -33,7 +33,7 @@ class _AccountPageState extends State<AccountPage> {
 
 class Background extends StatelessWidget {
   const Background({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -72,7 +72,7 @@ class Background extends StatelessWidget {
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(140)),
               color: Colors.white60),
           child: Image(
-            image: AssetImage('assets/user.png'),
+            image: AssetImage('assets/woman.png'),
             fit: BoxFit.contain,
           ),
         ),
@@ -82,7 +82,7 @@ class Background extends StatelessWidget {
 }
 
 class FormEdit extends StatefulWidget {
-  const FormEdit({Key key, this.scaffoldKey}) : super(key: key);
+  const FormEdit({Key? key, this.scaffoldKey}) : super(key: key);
   final scaffoldKey;
 
   @override
@@ -90,12 +90,9 @@ class FormEdit extends StatefulWidget {
 }
 
 class _FormEditState extends State<FormEdit> {
-  final UserPreferences preferences = new UserPreferences();
-
   Client client = new Client();
   User user = new User();
   ClientProvider clientProvider = new ClientProvider();
-  UserProvider userProvider = new UserProvider();
 
   String _dateOfBirth = '';
   bool _gender = true;
@@ -106,22 +103,28 @@ class _FormEditState extends State<FormEdit> {
 
   @override
   Widget build(BuildContext context) {
-    user.accessToken = preferences.accessToken;
-    user.refreshToken = preferences.refreshToken;
-
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 2 / 7,
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    return FutureBuilder(
+      future: userProvider.readToken(),
+      builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+        if (!snapshot.hasData) Container();
+        user.accessToken = snapshot.data![0];
+        user.refreshToken = snapshot.data![1];
+        return SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 2 / 7,
+              ),
+              _createTitle(),
+              SizedBox(
+                height: 14,
+              ),
+              _createForm(),
+            ],
           ),
-          _createTitle(),
-          SizedBox(
-            height: 14,
-          ),
-          _createForm(),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -148,10 +151,10 @@ class _FormEditState extends State<FormEdit> {
       future: clientProvider.getClient(user),
       builder: (BuildContext context, AsyncSnapshot<Client> snapshot) {
         if (snapshot.hasData) {
-          client = snapshot.data;
+          client = snapshot.data!;
           _gender = (client.sexo == 'M') ? false : true;
-          _dateController.text = client.fechaNacimiento.substring(0, 10);
-          client.fechaNacimiento = client.fechaNacimiento.substring(0, 10);
+          _dateController.text = client.fechaNacimiento!.substring(0, 10);
+          client.fechaNacimiento = client.fechaNacimiento!.substring(0, 10);
 
           return Container(
             margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -208,7 +211,7 @@ class _FormEditState extends State<FormEdit> {
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       initialValue: client.ci.toString(),
-      onSaved: (value) => client.ci = int.parse(value),
+      onSaved: (value) => client.ci = int.parse(value!),
     );
   }
 
@@ -220,7 +223,7 @@ class _FormEditState extends State<FormEdit> {
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       initialValue: client.nombres,
-      onSaved: (value) => client.nombres = value,
+      onSaved: (value) => client.nombres = value!,
     );
   }
 
@@ -232,7 +235,7 @@ class _FormEditState extends State<FormEdit> {
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       initialValue: client.apellidos,
-      onSaved: (value) => client.apellidos = value,
+      onSaved: (value) => client.apellidos = value!,
     );
   }
 
@@ -255,7 +258,7 @@ class _FormEditState extends State<FormEdit> {
 
   _selectDate(BuildContext context) async {
     DateTime now = new DateTime.now();
-    DateTime picked = await showDatePicker(
+    DateTime? picked = await showDatePicker(
       context: context,
       initialDate: new DateTime(now.year - 11),
       firstDate: new DateTime(now.year - 80),
@@ -281,7 +284,7 @@ class _FormEditState extends State<FormEdit> {
             value: !_gender,
             onChanged: (value) {
               setState(() {
-                _gender = value;
+                _gender = !value!;
                 client.sexo = "M";
               });
             },
@@ -296,9 +299,8 @@ class _FormEditState extends State<FormEdit> {
             value: _gender,
             onChanged: (value) {
               setState(() {
-                _gender = value;
+                _gender = value!;
                 client.sexo = "F";
-                print('GÉNERO');
               });
             },
             activeColor: Color.fromRGBO(6, 6, 6, 1),
@@ -320,7 +322,7 @@ class _FormEditState extends State<FormEdit> {
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       initialValue: client.telefono.toString(),
-      onSaved: (value) => client.telefono = int.parse(value),
+      onSaved: (value) => client.telefono = int.parse(value!),
     );
   }
 
@@ -332,7 +334,7 @@ class _FormEditState extends State<FormEdit> {
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       initialValue: client.direccion,
-      onSaved: (value) => client.direccion = value,
+      onSaved: (value) => client.direccion = value!,
     );
   }
 
@@ -344,7 +346,7 @@ class _FormEditState extends State<FormEdit> {
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       initialValue: client.pasaporte,
-      onSaved: (value) => client.pasaporte = value,
+      onSaved: (value) => client.pasaporte = value!,
     );
   }
 
@@ -356,7 +358,7 @@ class _FormEditState extends State<FormEdit> {
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       initialValue: client.nit.toString(),
-      onSaved: (value) => client.nit = int.parse(value),
+      onSaved: (value) => client.nit = int.parse(value!),
     );
   }
 
@@ -368,7 +370,7 @@ class _FormEditState extends State<FormEdit> {
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
       initialValue: client.nombreNit,
-      onSaved: (value) => client.nombreNit = value,
+      onSaved: (value) => client.nombreNit = value!,
     );
   }
 
@@ -388,8 +390,8 @@ class _FormEditState extends State<FormEdit> {
               color: Color.fromRGBO(6, 6, 6, 1),
               textColor: Colors.white,
               onPressed: () {
-                if (!formKey.currentState.validate()) return;
-                formKey.currentState.save();
+                if (!formKey.currentState!.validate()) return;
+                formKey.currentState!.save();
                 _update(context);
               },
             ),
@@ -400,8 +402,8 @@ class _FormEditState extends State<FormEdit> {
   }
 
   _update(BuildContext context) async {
-    client.accessToken = preferences.accessToken;
-    client.refreshToken = preferences.refreshToken;
+    client.accessToken = user.accessToken;
+    client.refreshToken = user.refreshToken;
     final resultUpdate = await clientProvider.update(client);
     if (resultUpdate) {
       Navigator.pushReplacementNamed(context, 'main');

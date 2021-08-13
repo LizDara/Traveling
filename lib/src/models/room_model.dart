@@ -12,10 +12,10 @@ class Room {
     this.tipoCama,
   });
 
-  int id;
-  String tipo;
-  int camas;
-  String tipoCama;
+  int? id;
+  String? tipo;
+  int? camas;
+  String? tipoCama;
 
   factory Room.fromJson(Map<String, dynamic> json) => Room(
         id: json["id"],

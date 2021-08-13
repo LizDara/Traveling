@@ -22,20 +22,20 @@ class Client {
     this.refreshToken,
   });
 
-  int ci;
-  String nombres;
-  String apellidos;
-  int telefono;
-  String fechaNacimiento;
-  String sexo;
-  String direccion;
-  String pasaporte;
-  int nit;
-  String nombreNit;
-  String correoElectronico;
-  String contrasena;
-  String accessToken;
-  String refreshToken;
+  int? ci;
+  String? nombres;
+  String? apellidos;
+  int? telefono;
+  String? fechaNacimiento;
+  String? sexo;
+  String? direccion;
+  String? pasaporte;
+  int? nit;
+  String? nombreNit;
+  String? correoElectronico;
+  String? contrasena;
+  String? accessToken;
+  String? refreshToken;
 
   factory Client.fromJson(Map<String, dynamic> json) => Client(
         ci: json["ci"],

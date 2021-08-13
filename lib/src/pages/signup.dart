@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:traveling/src/blocs/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:traveling/src/models/client_model.dart';
 import 'package:traveling/src/models/user_model.dart';
 import 'package:traveling/src/providers/ClientProvider.dart';
@@ -31,7 +31,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
 class Background extends StatelessWidget {
   const Background({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -80,7 +80,7 @@ class Background extends StatelessWidget {
 }
 
 class FormSignUp extends StatefulWidget {
-  const FormSignUp({Key key, @required this.scaffoldKey}) : super(key: key);
+  const FormSignUp({Key? key, @required this.scaffoldKey}) : super(key: key);
   final scaffoldKey;
   @override
   _FormSignUpState createState() => _FormSignUpState();
@@ -90,7 +90,6 @@ class _FormSignUpState extends State<FormSignUp> {
   Client client = new Client();
   User user = new User();
   ClientProvider clientProvider = new ClientProvider();
-  UserProvider userProvider = new UserProvider();
 
   String _dateOfBirth = '';
   bool _gender = true;
@@ -102,8 +101,6 @@ class _FormSignUpState extends State<FormSignUp> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = Provider.of(context);
-
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -143,15 +140,15 @@ class _FormSignUpState extends State<FormSignUp> {
                   SizedBox(height: 15),
                   _createNitName(),
                   SizedBox(height: 15),
-                  _createEmail(bloc),
+                  _createEmail(),
                   SizedBox(height: 15),
-                  _createPassword(bloc),
+                  _createPassword(),
                   SizedBox(height: 15),
-                  _createConfirmPassword(bloc),
+                  _createConfirmPassword(),
                   SizedBox(
                     height: 20,
                   ),
-                  _createSignUpButton(context, bloc),
+                  _createSignUpButton(context),
                   SizedBox(
                     height: 10,
                   ),
@@ -185,57 +182,59 @@ class _FormSignUpState extends State<FormSignUp> {
 
   Widget _createCI() {
     return TextFormField(
+      autocorrect: false,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         labelText: 'CI',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
-      onSaved: (value) => client.ci = int.parse(value),
+      onSaved: (value) => client.ci = int.parse(value!),
     );
   }
 
   Widget _createName() {
     return TextFormField(
+      autocorrect: false,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'Nombres',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
-      onSaved: (value) => client.nombres = value,
+      onSaved: (value) => client.nombres = value!,
     );
   }
 
   Widget _createLastName() {
     return TextFormField(
+      autocorrect: false,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'Apellidos',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
-      onSaved: (value) => client.apellidos = value,
+      onSaved: (value) => client.apellidos = value!,
     );
   }
 
   Widget _createDateOfBirth(BuildContext context) {
-    return Container(
-      child: TextFormField(
-        enableInteractiveSelection: false,
-        controller: _dateController,
-        decoration: InputDecoration(
-          labelText: 'Fecha de Nacimiento',
-          hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
-        ),
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-          _selectDate(context);
-        },
+    return TextFormField(
+      autocorrect: false,
+      enableInteractiveSelection: false,
+      controller: _dateController,
+      decoration: InputDecoration(
+        labelText: 'Fecha de Nacimiento',
+        hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
+      onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
+        _selectDate(context);
+      },
     );
   }
 
   _selectDate(BuildContext context) async {
     DateTime now = new DateTime.now();
-    DateTime picked = await showDatePicker(
+    DateTime? picked = await showDatePicker(
       context: context,
       initialDate: new DateTime(now.year - 11),
       firstDate: new DateTime(now.year - 80),
@@ -261,7 +260,7 @@ class _FormSignUpState extends State<FormSignUp> {
             value: !_gender,
             onChanged: (value) {
               setState(() {
-                _gender = value;
+                _gender = !value!;
                 client.sexo = "M";
               });
             },
@@ -276,7 +275,7 @@ class _FormSignUpState extends State<FormSignUp> {
             value: _gender,
             onChanged: (value) {
               setState(() {
-                _gender = value;
+                _gender = value!;
                 client.sexo = "F";
               });
             },
@@ -298,7 +297,7 @@ class _FormSignUpState extends State<FormSignUp> {
         labelText: 'Teléfono',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
-      onSaved: (value) => client.telefono = int.parse(value),
+      onSaved: (value) => client.telefono = int.parse(value!),
     );
   }
 
@@ -309,7 +308,7 @@ class _FormSignUpState extends State<FormSignUp> {
         labelText: 'Dirección',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
-      onSaved: (value) => client.direccion = value,
+      onSaved: (value) => client.direccion = value!,
     );
   }
 
@@ -320,7 +319,7 @@ class _FormSignUpState extends State<FormSignUp> {
         labelText: 'Pasaporte',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
-      onSaved: (value) => client.pasaporte = value,
+      onSaved: (value) => client.pasaporte = value!,
     );
   }
 
@@ -331,7 +330,7 @@ class _FormSignUpState extends State<FormSignUp> {
         labelText: 'NIT',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
-      onSaved: (value) => client.nit = int.parse(value),
+      onSaved: (value) => client.nit = int.parse(value!),
     );
   }
 
@@ -342,45 +341,45 @@ class _FormSignUpState extends State<FormSignUp> {
         labelText: 'Nombre NIT',
         hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
       ),
-      onSaved: (value) => client.nombreNit = value,
+      onSaved: (value) => client.nombreNit = value!,
     );
   }
 
-  Widget _createEmail(LoginBloc bloc) {
-    return StreamBuilder(
-        stream: bloc.emailStream,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return TextFormField(
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-                labelText: 'Correo Electrónico',
-                hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
-                errorText: snapshot.error),
-            onChanged: bloc.emailSink,
-            onSaved: (value) => client.correoElectronico = value,
-          );
-        });
-  }
-
-  Widget _createPassword(LoginBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.passwordStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return TextFormField(
-          keyboardType: TextInputType.emailAddress,
-          obscureText: true,
-          decoration: InputDecoration(
-              labelText: 'Contraseña',
-              hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
-              errorText: snapshot.error),
-          onChanged: bloc.passwordSink,
-          onSaved: (value) => client.contrasena = value,
-        );
+  Widget _createEmail() {
+    return TextFormField(
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        labelText: 'Correo Electrónico',
+        hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
+      ),
+      validator: (value) {
+        String pattern =
+            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+        RegExp regExp = new RegExp(pattern);
+        return regExp.hasMatch(value ?? '') ? null : 'El correo es inválido.';
       },
+      onSaved: (value) => client.correoElectronico = value!,
     );
   }
 
-  Widget _createConfirmPassword(LoginBloc bloc) {
+  Widget _createPassword() {
+    return TextFormField(
+      keyboardType: TextInputType.emailAddress,
+      obscureText: true,
+      decoration: InputDecoration(
+        labelText: 'Contraseña',
+        hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
+      ),
+      validator: (value) {
+        return (value != null && value.length >= 6)
+            ? null
+            : 'La contraseña debe tener más de 6 caracteres por favor';
+      },
+      onSaved: (value) => client.contrasena = value!,
+    );
+  }
+
+  Widget _createConfirmPassword() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
       obscureText: true,
@@ -390,40 +389,34 @@ class _FormSignUpState extends State<FormSignUp> {
           color: Color.fromRGBO(6, 6, 6, 1),
         ),
       ),
-      onSaved: (value) => _confirmPassword = value,
+      onSaved: (value) => _confirmPassword = value!,
     );
   }
 
-  Widget _createSignUpButton(BuildContext context, LoginBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.formValidStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Row(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                child: RaisedButton(
-                  padding: EdgeInsets.symmetric(vertical: 14),
-                  child: Text(
-                    'REGISTRARSE',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  color: Color.fromRGBO(6, 6, 6, 1),
-                  textColor: Colors.white,
-                  onPressed: () {
-                    if (!formKey.currentState.validate()) return;
-                    if (!snapshot.hasData) return;
-                    formKey.currentState.save();
-                    _register(context);
-                  },
-                ),
+  Widget _createSignUpButton(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Container(
+            child: RaisedButton(
+              padding: EdgeInsets.symmetric(vertical: 14),
+              child: Text(
+                'REGISTRARSE',
+                style: TextStyle(fontSize: 16),
               ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              color: Color.fromRGBO(6, 6, 6, 1),
+              textColor: Colors.white,
+              onPressed: () {
+                if (!formKey.currentState!.validate()) return;
+                formKey.currentState!.save();
+                _register(context);
+              },
             ),
-          ],
-        );
-      },
+          ),
+        ),
+      ],
     );
   }
 
@@ -449,12 +442,9 @@ class _FormSignUpState extends State<FormSignUp> {
 
   _register(BuildContext context) async {
     if (_confirmPassword == client.contrasena) {
-      print(client.nombres);
-      print(client.fechaNacimiento);
-      print(client.correoElectronico);
-      print(client.contrasena);
       final resultRegister = await clientProvider.register(client);
       if (resultRegister) {
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
         user.correoElectronico = client.correoElectronico;
         user.contrasena = client.contrasena;
         final resultLogin = await userProvider.login(user);

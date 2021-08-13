@@ -4,7 +4,7 @@ import 'package:traveling/src/models/reservationTravel_model.dart';
 import 'package:traveling/src/providers/TravelProvider.dart';
 
 class TravelsPage extends StatelessWidget {
-  const TravelsPage({Key key}) : super(key: key);
+  const TravelsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class TravelsPage extends StatelessWidget {
 
 class Background extends StatelessWidget {
   const Background({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -92,7 +92,7 @@ class Background extends StatelessWidget {
 }
 
 class Tickets extends StatefulWidget {
-  Tickets({Key key}) : super(key: key);
+  Tickets({Key? key}) : super(key: key);
 
   @override
   _TicketsState createState() => _TicketsState();
@@ -104,12 +104,12 @@ class _TicketsState extends State<Tickets> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: travelProvider.getTravels(),
+      future: travelProvider.getTravels(context),
       builder: (BuildContext context,
           AsyncSnapshot<List<ReservationTravel>> snapshot) {
         if (snapshot.hasData) {
           final travels = snapshot.data;
-          return (travels.length == 0)
+          return (travels!.length == 0)
               ? Center(
                   child: Text(
                     'No hay Boletos.',
@@ -138,8 +138,8 @@ class _TicketsState extends State<Tickets> {
                             child: Column(
                               children: <Widget>[
                                 _createInformation(
-                                    travels[index].itinerarios[0]),
-                                (travels[index].itinerarios.length > 1)
+                                    travels[index].itinerarios![0]),
+                                (travels[index].itinerarios!.length > 1)
                                     ? Container(
                                         margin: EdgeInsets.all(10),
                                         child: Image(
@@ -149,9 +149,9 @@ class _TicketsState extends State<Tickets> {
                                         ),
                                       )
                                     : Container(),
-                                (travels[index].itinerarios.length > 1)
+                                (travels[index].itinerarios!.length > 1)
                                     ? _createInformation(
-                                        travels[index].itinerarios[1])
+                                        travels[index].itinerarios![1])
                                     : Container(),
                                 Container(
                                   margin: EdgeInsets.all(10),
@@ -174,7 +174,7 @@ class _TicketsState extends State<Tickets> {
                                           fontWeight: FontWeight.w500),
                                     ),
                                     Text(
-                                      'BOB ' + travels[index].precio,
+                                      'BOB ' + (travels[index].precio ?? ''),
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500),
                                     )
@@ -234,12 +234,12 @@ class _TicketsState extends State<Tickets> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      itinerary.lugarSalida
+                      itinerary.lugarSalida!
                           .replaceAll(RegExp(' Department'), ''),
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     Text(
-                      _getDateTime(itinerary.fechaSalida),
+                      _getDateTime(itinerary.fechaSalida ?? ''),
                       style: TextStyle(
                           fontSize: 11,
                           color: Colors.black38,
@@ -249,12 +249,12 @@ class _TicketsState extends State<Tickets> {
                       height: 20,
                     ),
                     Text(
-                      itinerary.lugarLlegada
+                      itinerary.lugarLlegada!
                           .replaceAll(RegExp(' Department'), ''),
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     Text(
-                      _getDateTime(itinerary.fechaLlegada),
+                      _getDateTime(itinerary.fechaLlegada ?? ''),
                       style: TextStyle(
                           fontSize: 11,
                           color: Colors.black38,
@@ -285,7 +285,7 @@ class _TicketsState extends State<Tickets> {
                         fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    itinerary.salidaIataCodigo,
+                    itinerary.salidaIataCodigo ?? '',
                     style: TextStyle(fontWeight: FontWeight.w500),
                   )
                 ],
@@ -300,7 +300,7 @@ class _TicketsState extends State<Tickets> {
                         fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    itinerary.llegadaIataCodigo,
+                    itinerary.llegadaIataCodigo ?? '',
                     style: TextStyle(fontWeight: FontWeight.w500),
                   )
                 ],
@@ -315,7 +315,7 @@ class _TicketsState extends State<Tickets> {
                         fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    _getDuration(itinerary.duracion),
+                    _getDuration(itinerary.duracion ?? ''),
                     style: TextStyle(fontWeight: FontWeight.w500),
                   )
                 ],

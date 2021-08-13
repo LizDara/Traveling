@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:traveling/src/preferences/user_preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:traveling/src/providers/UserProvider.dart';
 
 class WelcomePage extends StatelessWidget {
-  WelcomePage({Key key}) : super(key: key);
-
-  final preferences = new UserPreferences();
+  WelcomePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,9 +19,7 @@ class WelcomePage extends StatelessWidget {
                 SizedBox(
                   height: 25,
                 ),
-                GetStarted(
-                  preferences: preferences,
-                )
+                GetStarted()
               ],
             ),
           ),
@@ -34,7 +31,7 @@ class WelcomePage extends StatelessWidget {
 
 class Background extends StatelessWidget {
   const Background({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -57,7 +54,7 @@ class Background extends StatelessWidget {
 
 class Welcome extends StatelessWidget {
   const Welcome({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -114,9 +111,8 @@ class Welcome extends StatelessWidget {
 }
 
 class GetStarted extends StatelessWidget {
-  const GetStarted({Key key, @required this.preferences}) : super(key: key);
+  const GetStarted({Key? key}) : super(key: key);
 
-  final UserPreferences preferences;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -152,8 +148,7 @@ class GetStarted extends StatelessWidget {
 
   Widget _createButton(BuildContext context) {
     return RaisedButton(
-      onPressed: () =>
-          Navigator.pushReplacementNamed(context, preferences.lastPage),
+      onPressed: () => _nextPage(context),
       child: Text(
         'Empecemos',
         style: TextStyle(fontSize: 16),
@@ -162,5 +157,15 @@ class GetStarted extends StatelessWidget {
       color: Color.fromRGBO(6, 6, 6, 1),
       textColor: Colors.white,
     );
+  }
+
+  _nextPage(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final tokens = await userProvider.readToken();
+    if (tokens[0] == '' && tokens[1] == '') {
+      Navigator.of(context).pushReplacementNamed('signin');
+    } else {
+      Navigator.of(context).pushReplacementNamed('main');
+    }
   }
 }

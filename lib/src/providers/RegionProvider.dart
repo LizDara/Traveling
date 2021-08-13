@@ -5,12 +5,8 @@ import 'package:traveling/src/models/searchRegion_model.dart';
 import 'package:traveling/src/providers/global.dart';
 
 class RegionProvider {
-  final String _url = baseUrl;
-
-  Future<List<Region>> searchRegion(SearchRegion searchRegion) async {
-    final url = '$_url/buscar-regiones/';
-
-    final response = await http.post(url,
+  Future<List<Region>?> searchRegion(SearchRegion searchRegion) async {
+    final response = await http.post(Uri.parse('$baseUrl/buscar-regiones/'),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'

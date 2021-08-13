@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:traveling/src/models/user_model.dart';
-import 'package:traveling/src/preferences/user_preferences.dart';
 import 'package:traveling/src/providers/UserProvider.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -23,7 +23,7 @@ class ProfilePage extends StatelessWidget {
 
 class Background extends StatelessWidget {
   const Background({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -53,15 +53,13 @@ class Background extends StatelessWidget {
 }
 
 class FormButton extends StatefulWidget {
-  const FormButton({Key key, @required this.scaffoldKey}) : super(key: key);
+  const FormButton({Key? key, @required this.scaffoldKey}) : super(key: key);
   final scaffoldKey;
   @override
   _FormButtonState createState() => _FormButtonState();
 }
 
 class _FormButtonState extends State<FormButton> {
-  UserPreferences preferences = new UserPreferences();
-
   User user = new User();
 
   UserProvider userProvider = new UserProvider();
@@ -102,14 +100,14 @@ class _FormButtonState extends State<FormButton> {
               ),
             ),
             Text(
-              'Marie',
+              'Alicia',
               style: TextStyle(
                   fontSize: 26,
                   color: Colors.white60,
                   fontWeight: FontWeight.bold),
             ),
             Text(
-              'Anderson',
+              'Garcia',
               style: TextStyle(
                   fontSize: 26,
                   color: Colors.white60,
@@ -195,11 +193,12 @@ class _FormButtonState extends State<FormButton> {
   }
 
   _logout(BuildContext context) async {
-    user.accessToken = preferences.accessToken;
-    user.refreshToken = preferences.refreshToken;
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final tokens = await userProvider.readToken();
+    user.accessToken = tokens[0];
+    user.refreshToken = tokens[1];
     final resultLogout = await userProvider.logout(user);
     if (resultLogout) {
-      preferences.clearPreferences();
       Navigator.pushReplacementNamed(context, 'welcome');
     } else {
       _showMessage('No se pudo cerrar sesión. Inténtelo nuevamente por favor.');

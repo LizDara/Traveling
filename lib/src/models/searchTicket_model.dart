@@ -19,16 +19,16 @@ class SearchTicket {
     this.toName,
   });
 
-  String fromIsoRegion;
-  String fromDateRange;
-  String fromTimeRange;
-  String toIsoRegion;
-  String toDateRange;
-  String toTimeRange;
-  int travelersNumbers;
-  bool roundTrip;
-  String fromName;
-  String toName;
+  String? fromIsoRegion;
+  String? fromDateRange;
+  String? fromTimeRange;
+  String? toIsoRegion;
+  String? toDateRange;
+  String? toTimeRange;
+  int? travelersNumbers;
+  bool? roundTrip;
+  String? fromName;
+  String? toName;
 
   factory SearchTicket.fromJson(Map<String, dynamic> json) => SearchTicket(
         fromIsoRegion: json["from_iso_region"],

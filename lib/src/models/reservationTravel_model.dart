@@ -17,15 +17,15 @@ class ReservationTravel {
     this.itinerarios,
   });
 
-  String id;
-  DateTime fecha;
-  String precio;
-  List<Itinerary> itinerarios;
+  String? id;
+  String? fecha;
+  String? precio;
+  List<Itinerary>? itinerarios;
 
   factory ReservationTravel.fromJson(Map<String, dynamic> json) =>
       ReservationTravel(
         id: json["id"],
-        fecha: DateTime.parse(json["fecha"]),
+        fecha: json["fecha"],
         precio: json["precio"],
         itinerarios: json["itinerarios"] == null
             ? null
@@ -35,10 +35,10 @@ class ReservationTravel {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "fecha": fecha.toIso8601String(),
+        "fecha": fecha,
         "precio": precio,
         "itinerarios": itinerarios == null
             ? null
-            : List<dynamic>.from(itinerarios.map((x) => x.toJson())),
+            : List<dynamic>.from(itinerarios!.map((x) => x.toJson())),
       };
 }

@@ -3,7 +3,7 @@ import 'package:traveling/src/models/region_model.dart';
 import 'package:traveling/src/widgets/RegionSearchDelegate.dart';
 
 class ReservationPage extends StatefulWidget {
-  ReservationPage({Key key}) : super(key: key);
+  ReservationPage({Key? key}) : super(key: key);
 
   @override
   _ReservationPageState createState() => _ReservationPageState();
@@ -22,7 +22,7 @@ class _ReservationPageState extends State<ReservationPage> {
 
 class Background extends StatelessWidget {
   const Background({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -63,7 +63,7 @@ class Background extends StatelessWidget {
 
 class FormReservation extends StatefulWidget {
   const FormReservation({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

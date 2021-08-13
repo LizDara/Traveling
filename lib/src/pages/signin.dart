@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:traveling/src/blocs/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:traveling/src/models/user_model.dart';
 import 'package:traveling/src/providers/UserProvider.dart';
 
@@ -22,7 +22,7 @@ class SignInPage extends StatelessWidget {
 
 class Background extends StatelessWidget {
   const Background({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -81,12 +81,10 @@ class FormSignIn extends StatefulWidget {
 class _FormSignInState extends State<FormSignIn> {
   User user = new User();
 
-  UserProvider userProvider = new UserProvider();
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final bloc = Provider.of(context);
-
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -103,20 +101,24 @@ class _FormSignInState extends State<FormSignIn> {
               decoration: BoxDecoration(
                   color: Colors.white70,
                   borderRadius: BorderRadius.circular(18)),
-              child: Column(
-                children: <Widget>[
-                  _createEmail(bloc),
-                  SizedBox(height: 20),
-                  _createPassword(bloc),
-                  SizedBox(
-                    height: 36,
-                  ),
-                  _createSignInButton(bloc),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  _createSignUpText(context)
-                ],
+              child: Form(
+                key: formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  children: <Widget>[
+                    _createEmail(),
+                    SizedBox(height: 20),
+                    _createPassword(),
+                    SizedBox(
+                      height: 36,
+                    ),
+                    _createSignInButton(),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    _createSignUpText(context)
+                  ],
+                ),
               )),
         ],
       ),
@@ -141,68 +143,69 @@ class _FormSignInState extends State<FormSignIn> {
     );
   }
 
-  Widget _createEmail(LoginBloc bloc) {
-    return StreamBuilder(
-        stream: bloc.emailStream,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return TextField(
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              labelText: 'Correo Electrónico',
-              hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
-            ),
-            onChanged: bloc.emailSink,
-          );
-        });
-  }
-
-  Widget _createPassword(LoginBloc bloc) {
-    return StreamBuilder(
-        stream: bloc.passwordStream,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return TextField(
-            keyboardType: TextInputType.text,
-            obscureText: true,
-            decoration: InputDecoration(
-              labelText: 'Contraseña',
-              hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
-            ),
-            onChanged: bloc.passwordSink,
-          );
-        });
-  }
-
-  Widget _createSignInButton(LoginBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.formValidStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Row(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                child: RaisedButton(
-                    padding: EdgeInsets.symmetric(vertical: 14),
-                    child: Text(
-                      'INICIAR SESIÓN',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    color: Color.fromRGBO(6, 6, 6, 1),
-                    textColor: Colors.white,
-                    onPressed:
-                        snapshot.hasData ? () => _login(bloc, context) : null),
-              ),
-            ),
-          ],
-        );
+  Widget _createEmail() {
+    return TextFormField(
+      autocorrect: false,
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        labelText: 'Correo Electrónico',
+        hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
+      ),
+      validator: (value) {
+        String pattern =
+            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+        RegExp regExp = new RegExp(pattern);
+        return regExp.hasMatch(value ?? '') ? null : 'El correo es inválido.';
       },
+      onSaved: (value) => user.correoElectronico = value!,
     );
   }
 
-  _login(LoginBloc bloc, BuildContext context) async {
-    user.correoElectronico = bloc.email;
-    user.contrasena = bloc.password;
+  Widget _createPassword() {
+    return TextFormField(
+      autocorrect: false,
+      keyboardType: TextInputType.text,
+      obscureText: true,
+      decoration: InputDecoration(
+        labelText: 'Contraseña',
+        hintStyle: TextStyle(color: Color.fromRGBO(6, 6, 6, 1)),
+      ),
+      onSaved: (value) => user.contrasena = value!,
+    );
+  }
+
+  Widget _createSignInButton() {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Container(
+            child: RaisedButton(
+              padding: EdgeInsets.symmetric(vertical: 14),
+              child: Text(
+                'INICIAR SESIÓN',
+                style: TextStyle(fontSize: 16),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              color: Color.fromRGBO(6, 6, 6, 1),
+              textColor: Colors.white,
+              onPressed: () {
+                print('ON PRESSED LOGIN');
+                if (!formKey.currentState!.validate()) return;
+                formKey.currentState!.save();
+                _login(context);
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  _login(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    print(user.correoElectronico);
+    print(user.contrasena);
     final resultLogin = await userProvider.login(user);
     if (resultLogin) {
       Navigator.pushReplacementNamed(context, 'main');

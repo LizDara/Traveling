@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatelessWidget {
-  const SearchPage({Key key}) : super(key: key);
+  const SearchPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class SearchPage extends StatelessWidget {
 
 class Background extends StatelessWidget {
   const Background({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -52,7 +52,7 @@ class Background extends StatelessWidget {
 }
 
 class FindTrip extends StatelessWidget {
-  const FindTrip({Key key}) : super(key: key);
+  const FindTrip({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -10,7 +10,7 @@ class OffersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final SearchTicket searchTicket =
-        ModalRoute.of(context).settings.arguments as SearchTicket;
+        ModalRoute.of(context)!.settings.arguments as SearchTicket;
 
     return Scaffold(
       key: scaffoldKey,
@@ -26,7 +26,7 @@ class OffersPage extends StatelessWidget {
 
 class Background extends StatelessWidget {
   const Background({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -57,7 +57,7 @@ class FlightsList extends StatefulWidget {
 }
 
 class _FlightsListState extends State<FlightsList> {
-  List<TicketList> ticketList = new List<TicketList>();
+  List<TicketList> ticketList = [];
 
   final TicketProvider ticketProvider = new TicketProvider();
 
@@ -68,7 +68,7 @@ class _FlightsListState extends State<FlightsList> {
       builder:
           (BuildContext context, AsyncSnapshot<List<TicketList>> snapshot) {
         if (snapshot.hasData) {
-          ticketList = snapshot.data;
+          ticketList = snapshot.data!;
           return (ticketList.length == 0)
               ? Center(
                   child: Text(
@@ -101,9 +101,10 @@ class _FlightsListState extends State<FlightsList> {
                                     children: <Widget>[
                                       Text(
                                         ticketList[index]
-                                            .travelerPricings[0]
-                                            .fareDetailsBySegment[0]
-                                            .cabin,
+                                                .travelerPricings![0]
+                                                .fareDetailsBySegment![0]
+                                                .cabin ??
+                                            '',
                                         style: TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.w500),
@@ -118,9 +119,10 @@ class _FlightsListState extends State<FlightsList> {
                                         child: FlatButton(
                                           child: Text(
                                             'BOB ' +
-                                                ticketList[index]
-                                                    .price
-                                                    .grandTotal +
+                                                (ticketList[index]
+                                                        .price!
+                                                        .grandTotal ??
+                                                    '') +
                                                 ' Reservar',
                                             style: TextStyle(
                                                 color: Colors.white,
@@ -151,7 +153,7 @@ class _FlightsListState extends State<FlightsList> {
     );
   }
 
-  Widget _createItinerary(List<Itinerary> itineraries) {
+  Widget _createItinerary(List<Itinerary>? itineraries) {
     return Column(
       children: <Widget>[
         Column(
@@ -165,7 +167,7 @@ class _FlightsListState extends State<FlightsList> {
                       color: Color.fromRGBO(6, 6, 6, 1),
                       borderRadius: BorderRadius.circular(12)),
                   child: Text(
-                    itineraries[0].segments[0].departure.iataCode,
+                    itineraries![0].segments![0].departure!.iataCode ?? '',
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.w600),
                   ),
@@ -179,7 +181,7 @@ class _FlightsListState extends State<FlightsList> {
                         color: Colors.black26,
                       ),
                       Text(
-                        _getDuration(itineraries[0].duration),
+                        _getDuration(itineraries[0].duration ?? ''),
                         style: TextStyle(
                             fontSize: 20,
                             color: Color.fromRGBO(6, 6, 6, 1),
@@ -196,7 +198,7 @@ class _FlightsListState extends State<FlightsList> {
                           color: Color.fromRGBO(135, 134, 210, 0.9), width: 2),
                       borderRadius: BorderRadius.circular(12)),
                   child: Text(
-                    itineraries[0].segments[0].arrival.iataCode,
+                    itineraries[0].segments![0].arrival!.iataCode ?? '',
                     style: TextStyle(
                         color: Color.fromRGBO(135, 134, 210, 0.9),
                         fontWeight: FontWeight.w600),
@@ -210,12 +212,12 @@ class _FlightsListState extends State<FlightsList> {
             Row(
               children: <Widget>[
                 Text(
-                  _getDateTime(itineraries[0].segments[0].departure.at),
+                  _getDateTime(itineraries[0].segments![0].departure!.at ?? ''),
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
                 ),
                 Expanded(child: Container()),
                 Text(
-                  _getDateTime(itineraries[0].segments[0].arrival.at),
+                  _getDateTime(itineraries[0].segments![0].arrival!.at ?? ''),
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
                 ),
               ],
@@ -235,7 +237,7 @@ class _FlightsListState extends State<FlightsList> {
                             color: Color.fromRGBO(6, 6, 6, 1),
                             borderRadius: BorderRadius.circular(12)),
                         child: Text(
-                          itineraries[1].segments[0].departure.iataCode,
+                          itineraries[1].segments![0].departure!.iataCode ?? '',
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.w600),
                         ),
@@ -249,7 +251,7 @@ class _FlightsListState extends State<FlightsList> {
                               color: Colors.black26,
                             ),
                             Text(
-                              _getDuration(itineraries[0].duration),
+                              _getDuration(itineraries[0].duration ?? ''),
                               style: TextStyle(
                                   fontSize: 20,
                                   color: Color.fromRGBO(6, 6, 6, 1),
@@ -268,7 +270,7 @@ class _FlightsListState extends State<FlightsList> {
                                 width: 2),
                             borderRadius: BorderRadius.circular(12)),
                         child: Text(
-                          itineraries[1].segments[0].arrival.iataCode,
+                          itineraries[1].segments![0].arrival!.iataCode ?? '',
                           style: TextStyle(
                               color: Color.fromRGBO(135, 134, 210, 0.9),
                               fontWeight: FontWeight.w600),
@@ -282,13 +284,15 @@ class _FlightsListState extends State<FlightsList> {
                   Row(
                     children: <Widget>[
                       Text(
-                        _getDateTime(itineraries[1].segments[0].departure.at),
+                        _getDateTime(
+                            itineraries[1].segments![0].departure!.at ?? ''),
                         style: TextStyle(
                             fontSize: 12, fontWeight: FontWeight.w700),
                       ),
                       Expanded(child: Container()),
                       Text(
-                        _getDateTime(itineraries[1].segments[0].arrival.at),
+                        _getDateTime(
+                            itineraries[1].segments![0].arrival!.at ?? ''),
                         style: TextStyle(
                             fontSize: 12, fontWeight: FontWeight.w700),
                       ),

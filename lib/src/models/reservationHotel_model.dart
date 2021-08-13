@@ -18,14 +18,14 @@ class ReservationHotel {
     this.itinerarioId,
   });
 
-  int id;
-  String nombreHotel;
-  String direccionHotel;
-  String telefonoHotel;
-  String fechaIngreso;
-  String fechaSalida;
-  double precio;
-  int itinerarioId;
+  int? id;
+  String? nombreHotel;
+  String? direccionHotel;
+  String? telefonoHotel;
+  String? fechaIngreso;
+  String? fechaSalida;
+  double? precio;
+  int? itinerarioId;
 
   factory ReservationHotel.fromJson(Map<String, dynamic> json) =>
       ReservationHotel(

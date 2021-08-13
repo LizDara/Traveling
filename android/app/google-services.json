@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "544101370938",
+    "project_id": "travel-notifications-b6448",
+    "storage_bucket": "travel-notifications-b6448.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544101370938:android:51a13279e4d4d4471e7903",
+        "android_client_info": {
+          "package_name": "com.example.traveling"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "544101370938-9jfv8bdfdicl8b9d74f90trnkt262bsh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.traveling",
+            "certificate_hash": "f70d6136c84684ee973e1d8959a068301a12b93c"
+          }
+        },
+        {
+          "client_id": "544101370938-lhfqi3hmnobg07lk0ektmecjaqqhp680.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5tiP4aD4AewyfutwQO5vxjhTgZzMJGDA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "544101370938-lhfqi3hmnobg07lk0ektmecjaqqhp680.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

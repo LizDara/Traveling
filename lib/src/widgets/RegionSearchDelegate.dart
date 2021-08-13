@@ -39,7 +39,7 @@ class RegionSearchDelegate extends SearchDelegate {
 
     return FutureBuilder(
       future: regionProvider.searchRegion(searchRegion),
-      builder: (BuildContext context, AsyncSnapshot<List<Region>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<Region>?> snapshot) {
         if (!snapshot.hasData) {
           return Center(
             child: Text(
@@ -51,10 +51,10 @@ class RegionSearchDelegate extends SearchDelegate {
         final regions = snapshot.data;
 
         return ListView.builder(
-          itemCount: regions.length,
+          itemCount: regions!.length,
           itemBuilder: (BuildContext context, int index) {
             final Region region = regions[index];
-            List<String> names = region.name.split(',');
+            List<String> names = region.name!.split(',');
             return ListTile(
               title: Text(names[0]),
               subtitle: Text(names[1]),

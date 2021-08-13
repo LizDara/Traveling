@@ -12,7 +12,7 @@ class RegionsList {
     this.results,
   });
 
-  List<Region> results;
+  List<Region>? results;
 
   factory RegionsList.fromJson(Map<String, dynamic> json) => RegionsList(
         results:
@@ -20,6 +20,6 @@ class RegionsList {
       );
 
   Map<String, dynamic> toJson() => {
-        "results": List<dynamic>.from(results.map((x) => x.toJson())),
+        "results": List<dynamic>.from(results!.map((x) => x.toJson())),
       };
 }

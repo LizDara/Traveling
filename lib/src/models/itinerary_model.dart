@@ -17,15 +17,15 @@ class Itinerary {
     this.fechaLlegada,
   });
 
-  String id;
-  String duracion;
-  String reservaId;
-  String lugarSalida;
-  String lugarLlegada;
-  String salidaIataCodigo;
-  String llegadaIataCodigo;
-  String fechaSalida;
-  String fechaLlegada;
+  String? id;
+  String? duracion;
+  String? reservaId;
+  String? lugarSalida;
+  String? lugarLlegada;
+  String? salidaIataCodigo;
+  String? llegadaIataCodigo;
+  String? fechaSalida;
+  String? fechaLlegada;
 
   factory Itinerary.fromJson(Map<String, dynamic> json) => Itinerary(
         id: json["id"],

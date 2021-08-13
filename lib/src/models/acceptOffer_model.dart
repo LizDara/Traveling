@@ -12,14 +12,14 @@ class AcceptOffer {
     this.data,
   });
 
-  Data data;
+  Data? data;
 
   factory AcceptOffer.fromJson(Map<String, dynamic> json) => AcceptOffer(
         data: Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data.toJson(),
+        "data": data!.toJson(),
       };
 }
 
@@ -30,9 +30,9 @@ class Data {
     this.travelers,
   });
 
-  String type;
-  List<TicketList> flightOffers;
-  List<Traveler> travelers;
+  String? type;
+  List<TicketList>? flightOffers;
+  List<Traveler>? travelers;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         type: json["type"],
@@ -44,7 +44,8 @@ class Data {
 
   Map<String, dynamic> toJson() => {
         "type": type,
-        "flightOffers": List<dynamic>.from(flightOffers.map((x) => x.toJson())),
-        "travelers": List<dynamic>.from(travelers.map((x) => x.toJson())),
+        "flightOffers":
+            List<dynamic>.from(flightOffers!.map((x) => x.toJson())),
+        "travelers": List<dynamic>.from(travelers!.map((x) => x.toJson())),
       };
 }

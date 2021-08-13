@@ -1,36 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:traveling/src/blocs/provider.dart';
-import 'package:traveling/src/preferences/user_preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:traveling/src/providers/UserProvider.dart';
 import 'package:traveling/src/routes/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:traveling/src/services/push_notifications_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final preferences = new UserPreferences();
-  await preferences.initPreferences();
+  await PushNotificationService.initializeApp();
 
-  runApp(MyApp());
+  runApp(AppState());
+}
+
+class AppState extends StatelessWidget {
+  const AppState({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => UserProvider(),
+          lazy: false,
+        )
+      ],
+      child: MyApp(),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      child: MaterialApp(
-        title: 'Flight',
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('en', 'US'),
-          const Locale('es', 'ES'),
-        ],
-        theme: _myTheme(),
-        initialRoute: 'welcome',
-        routes: getApplicationRoutes(),
-      ),
+    return MaterialApp(
+      title: 'Flight',
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', 'US'),
+        const Locale('es', 'ES'),
+      ],
+      theme: _myTheme(),
+      initialRoute: 'welcome',
+      routes: getApplicationRoutes(),
     );
   }
 

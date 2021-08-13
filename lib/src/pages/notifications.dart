@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:traveling/src/objects/reservation.dart';
 
 class NotificationsPage extends StatelessWidget {
-  const NotificationsPage({Key key}) : super(key: key);
+  const NotificationsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class NotificationsPage extends StatelessWidget {
 
 class Background extends StatelessWidget {
   const Background({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -38,15 +38,14 @@ class Background extends StatelessWidget {
 }
 
 class Notifications extends StatefulWidget {
-  Notifications({Key key}) : super(key: key);
+  Notifications({Key? key}) : super(key: key);
 
   @override
   _NotificationsState createState() => _NotificationsState();
 }
 
 class _NotificationsState extends State<Notifications> {
-  final List<Reservation> reservations = new List();
-  /*[
+  final List<Reservation> reservations = [
     new Reservation(
         from: 'Botswana',
         to: 'Bermudas',
@@ -159,7 +158,7 @@ class _NotificationsState extends State<Notifications> {
         flight: 'CK88',
         typeClass: 'Ejecutivo',
         isExpanded: false),
-  ];*/
+  ];
 
   @override
   Widget build(BuildContext context) {

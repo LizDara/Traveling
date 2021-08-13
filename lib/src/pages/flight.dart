@@ -3,12 +3,12 @@ import 'package:traveling/src/models/itinerary_model.dart';
 import 'package:traveling/src/models/reservationTravel_model.dart';
 
 class FlightPage extends StatelessWidget {
-  const FlightPage({Key key}) : super(key: key);
+  const FlightPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final reservation =
-        ModalRoute.of(context).settings.arguments as ReservationTravel;
+        ModalRoute.of(context)!.settings.arguments as ReservationTravel;
 
     return Scaffold(
       body: Stack(
@@ -27,8 +27,8 @@ class FlightPage extends StatelessWidget {
 
 class Background extends StatelessWidget {
   const Background({
-    Key key,
-    this.reservation,
+    Key? key,
+    required this.reservation,
   }) : super(key: key);
   final ReservationTravel reservation;
 
@@ -95,7 +95,7 @@ class Background extends StatelessWidget {
     return Row(
       children: <Widget>[
         Text(
-          reservation.itinerarios[0].salidaIataCodigo,
+          reservation.itinerarios![0].salidaIataCodigo ?? '',
           style: TextStyle(
             fontSize: 34,
             fontWeight: FontWeight.w500,
@@ -106,7 +106,7 @@ class Background extends StatelessWidget {
           child: Container(),
         ),
         Text(
-          reservation.itinerarios[0].llegadaIataCodigo,
+          reservation.itinerarios![0].llegadaIataCodigo ?? '',
           style: TextStyle(
             fontSize: 34,
             fontWeight: FontWeight.w500,
@@ -121,7 +121,7 @@ class Background extends StatelessWidget {
     return Row(
       children: <Widget>[
         Text(
-          reservation.itinerarios[0].lugarSalida
+          reservation.itinerarios![0].lugarSalida!
               .replaceAll(new RegExp(r' Department'), ''),
           style: TextStyle(
             color: Colors.white70,
@@ -132,7 +132,7 @@ class Background extends StatelessWidget {
           child: Container(),
         ),
         Text(
-          reservation.itinerarios[0].lugarLlegada
+          reservation.itinerarios![0].lugarLlegada!
               .replaceAll(new RegExp(r' Department'), ''),
           style: TextStyle(
             color: Colors.white70,
@@ -145,7 +145,7 @@ class Background extends StatelessWidget {
 }
 
 class Detail extends StatefulWidget {
-  Detail({this.reservation});
+  Detail({required this.reservation});
   final ReservationTravel reservation;
 
   @override
@@ -205,7 +205,7 @@ class _DetailState extends State<Detail> {
 }
 
 class TicketDetails extends StatefulWidget {
-  TicketDetails({Key key, this.reservation}) : super(key: key);
+  TicketDetails({Key? key, required this.reservation}) : super(key: key);
   final ReservationTravel reservation;
 
   @override
@@ -253,9 +253,9 @@ class _TicketDetailsState extends State<TicketDetails> {
             child: Image(image: AssetImage('assets/line_light.png')),
           ),
           FlightDetail(
-            itinerary: widget.reservation.itinerarios[0],
+            itinerary: widget.reservation.itinerarios![0],
           ),
-          (widget.reservation.itinerarios.length > 1)
+          (widget.reservation.itinerarios!.length > 1)
               ? Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
@@ -297,9 +297,9 @@ class _TicketDetailsState extends State<TicketDetails> {
                   ],
                 )
               : Container(),
-          (widget.reservation.itinerarios.length > 1)
+          (widget.reservation.itinerarios!.length > 1)
               ? FlightDetail(
-                  itinerary: widget.reservation.itinerarios[1],
+                  itinerary: widget.reservation.itinerarios![1],
                 )
               : Container(),
         ],
@@ -324,7 +324,7 @@ class _TicketDetailsState extends State<TicketDetails> {
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                r'BOB ' + widget.reservation.precio,
+                'BOB ' + (widget.reservation.precio ?? ''),
                 style: TextStyle(
                     color: Color.fromRGBO(6, 6, 6, 1),
                     fontSize: 20,
@@ -339,7 +339,7 @@ class _TicketDetailsState extends State<TicketDetails> {
 }
 
 class FlightDetail extends StatelessWidget {
-  const FlightDetail({Key key, this.itinerary}) : super(key: key);
+  const FlightDetail({Key? key, required this.itinerary}) : super(key: key);
   final Itinerary itinerary;
 
   @override
@@ -362,7 +362,7 @@ class FlightDetail extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                _getDateTime(itinerary.fechaSalida),
+                _getDateTime(itinerary.fechaSalida ?? ''),
                 style: TextStyle(
                     color: Color.fromRGBO(6, 6, 6, 1),
                     fontSize: 16,
@@ -382,7 +382,7 @@ class FlightDetail extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                _getDateTime(itinerary.fechaLlegada),
+                _getDateTime(itinerary.fechaLlegada ?? ''),
                 style: TextStyle(
                     color: Color.fromRGBO(6, 6, 6, 1),
                     fontSize: 16,
@@ -407,7 +407,7 @@ class FlightDetail extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                itinerary.salidaIataCodigo,
+                itinerary.salidaIataCodigo ?? '',
                 style: TextStyle(
                     color: Color.fromRGBO(6, 6, 6, 1),
                     fontSize: 16,
@@ -427,7 +427,7 @@ class FlightDetail extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                itinerary.llegadaIataCodigo,
+                itinerary.llegadaIataCodigo ?? '',
                 style: TextStyle(
                     color: Color.fromRGBO(6, 6, 6, 1),
                     fontSize: 16,
@@ -452,7 +452,7 @@ class FlightDetail extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                _getDuration(itinerary.duracion),
+                _getDuration(itinerary.duracion ?? ''),
                 style: TextStyle(
                     color: Color.fromRGBO(6, 6, 6, 1),
                     fontSize: 16,

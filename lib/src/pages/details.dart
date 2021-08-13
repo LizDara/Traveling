@@ -4,7 +4,7 @@ import 'package:traveling/src/models/searchTicket_model.dart';
 import 'package:traveling/src/providers/TicketProvider.dart';
 
 class DetailsPage extends StatefulWidget {
-  DetailsPage({Key key}) : super(key: key);
+  DetailsPage({Key? key}) : super(key: key);
 
   @override
   _DetailsPageState createState() => _DetailsPageState();
@@ -16,7 +16,7 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
     final List<Region> regions =
-        ModalRoute.of(context).settings.arguments as List<Region>;
+        ModalRoute.of(context)!.settings.arguments as List<Region>;
 
     return Scaffold(
       key: scaffoldKey,
@@ -35,9 +35,9 @@ class _DetailsPageState extends State<DetailsPage> {
 
 class Background extends StatelessWidget {
   const Background({
-    Key key,
-    this.departure,
-    this.destination,
+    Key? key,
+    required this.departure,
+    required this.destination,
   }) : super(key: key);
 
   final Region departure;
@@ -106,7 +106,7 @@ class Background extends StatelessWidget {
     return Row(
       children: <Widget>[
         Text(
-          departure.isoRegion,
+          departure.isoRegion ?? '',
           style: TextStyle(
             fontSize: 34,
             fontWeight: FontWeight.w500,
@@ -117,7 +117,7 @@ class Background extends StatelessWidget {
           child: Container(),
         ),
         Text(
-          destination.isoRegion,
+          destination.isoRegion ?? '',
           style: TextStyle(
             fontSize: 34,
             fontWeight: FontWeight.w500,
@@ -132,7 +132,7 @@ class Background extends StatelessWidget {
     return Row(
       children: <Widget>[
         Text(
-          departure.name.replaceAll(new RegExp(r' Department'), ''),
+          departure.name!.replaceAll(new RegExp(r' Department'), ''),
           style: TextStyle(
             color: Colors.white70,
             fontWeight: FontWeight.bold,
@@ -142,7 +142,7 @@ class Background extends StatelessWidget {
           child: Container(),
         ),
         Text(
-          destination.name.replaceAll(new RegExp(r' Department'), ''),
+          destination.name!.replaceAll(new RegExp(r' Department'), ''),
           style: TextStyle(
             color: Colors.white70,
             fontWeight: FontWeight.bold,
@@ -226,9 +226,9 @@ class _FormDetailState extends State<FormDetail> {
 
 class FlightDetails extends StatefulWidget {
   const FlightDetails({
-    this.searchTicket,
-    this.departure,
-    this.destination,
+    required this.searchTicket,
+    required this.departure,
+    required this.destination,
   });
   final SearchTicket searchTicket;
   final Region departure;
@@ -381,7 +381,7 @@ class _FlightDetailsState extends State<FlightDetails> {
               FocusScope.of(context).requestFocus(new FocusNode());
               _selectDate(context, true);
             },
-            child: null,
+            child: Container(),
           ),
         )
       ],
@@ -391,12 +391,12 @@ class _FlightDetailsState extends State<FlightDetails> {
   _selectDate(BuildContext context, bool isDeparture) async {
     DateTime now = new DateTime.now();
     DateTime picked;
-    if (widget.departure.isoCountry.length > 4) {
-      final dateTime1 = widget.departure.isoCountry.split('T');
+    if (widget.departure.isoCountry!.length > 4) {
+      final dateTime1 = widget.departure.isoCountry!.split('T');
       final date1 = dateTime1[0].split('-');
-      final dateTime2 = widget.destination.isoCountry.split('T');
+      final dateTime2 = widget.destination.isoCountry!.split('T');
       final date2 = dateTime2[0].split('-');
-      picked = await showDatePicker(
+      picked = (await showDatePicker(
         context: context,
         initialDate: new DateTime(
             int.parse(date1[0]), int.parse(date1[1]), int.parse(date1[2])),
@@ -405,15 +405,15 @@ class _FlightDetailsState extends State<FlightDetails> {
         lastDate: new DateTime(
             int.parse(date2[0]), int.parse(date2[1]), int.parse(date2[2])),
         locale: Locale('es', 'ES'),
-      );
+      ))!;
     } else {
-      picked = await showDatePicker(
+      picked = (await showDatePicker(
         context: context,
         initialDate: new DateTime(now.year),
         firstDate: new DateTime(now.year),
         lastDate: new DateTime(now.year + 1),
         locale: Locale('es', 'ES'),
-      );
+      ))!;
     }
     if (picked != null) {
       setState(() {
@@ -433,7 +433,8 @@ class _FlightDetailsState extends State<FlightDetails> {
 
   _selectTime(BuildContext context, bool isDeparture) async {
     TimeOfDay now = new TimeOfDay.now();
-    TimeOfDay picked = await showTimePicker(context: context, initialTime: now);
+    TimeOfDay? picked =
+        await showTimePicker(context: context, initialTime: now);
     if (picked != null) {
       setState(() {
         if (isDeparture) {
@@ -532,7 +533,7 @@ class _FlightDetailsState extends State<FlightDetails> {
                     FocusScope.of(context).requestFocus(new FocusNode());
                     _selectDate(context, false);
                   },
-                  child: null,
+                  child: Container(),
                 ),
               )
             ],
@@ -589,7 +590,7 @@ class _FlightDetailsState extends State<FlightDetails> {
               borderRadius: BorderRadius.circular(180), color: Colors.black26),
           child: FlatButton(
             onPressed: () => _showSeatClass(context),
-            child: null,
+            child: Container(),
           ),
         )
       ],
@@ -627,14 +628,14 @@ class _FlightDetailsState extends State<FlightDetails> {
         items: _getOptions(),
         onChanged: (opt) {
           setState(() {
-            seatClass = opt;
+            seatClass = opt.toString();
             print(opt);
           });
         });
   }
 
   List<DropdownMenuItem<String>> _getOptions() {
-    List<DropdownMenuItem<String>> list = new List();
+    List<DropdownMenuItem<String>> list = [];
     options.forEach((option) {
       list.add(DropdownMenuItem(
         child: Text(option),

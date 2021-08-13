@@ -14,12 +14,12 @@ class Ticket {
     this.segmentoId,
   });
 
-  int id;
-  String cabina;
-  String clase;
-  double precio;
-  String boleto;
-  int segmentoId;
+  int? id;
+  String? cabina;
+  String? clase;
+  double? precio;
+  String? boleto;
+  int? segmentoId;
 
   factory Ticket.fromJson(Map<String, dynamic> json) => Ticket(
         id: json["id"],

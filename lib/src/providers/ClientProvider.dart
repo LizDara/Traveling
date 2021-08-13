@@ -4,12 +4,8 @@ import 'package:traveling/src/models/user_model.dart';
 import 'package:traveling/src/providers/global.dart';
 
 class ClientProvider {
-  final String _url = baseUrl;
-
   Future<bool> register(Client client) async {
-    final url = '$_url/registrar-cliente/';
-
-    final response = await http.post(url,
+    final response = await http.post(Uri.http(baseUrl, '/registrar-cliente/'),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
@@ -23,9 +19,7 @@ class ClientProvider {
   }
 
   Future<Client> getClient(User user) async {
-    final url = '$_url/obtener-cliente/';
-
-    final response = await http.post(url,
+    final response = await http.post(Uri.parse('$baseUrl/obtener-cliente/'),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
@@ -41,10 +35,7 @@ class ClientProvider {
   }
 
   Future<bool> update(Client client) async {
-    final url = '$_url/modificar-cliente/';
-
-    print(clientToJson(client));
-    final response = await http.post(url,
+    final response = await http.post(Uri.parse('$baseUrl/modificar-cliente/'),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
@@ -52,20 +43,6 @@ class ClientProvider {
         body: clientToJson(client));
 
     print(response.statusCode);
-    if (response.statusCode == 200) {
-      return true;
-    }
-    return false;
-  }
-
-  Future<bool> delete(int id) async {
-    final url = '$_url/';
-
-    final response = await http.delete(url, headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    });
-
     if (response.statusCode == 200) {
       return true;
     }

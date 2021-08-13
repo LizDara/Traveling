@@ -11,9 +11,9 @@ class Region {
     this.isoCountry,
   });
 
-  String isoRegion;
-  String name;
-  String isoCountry;
+  String? isoRegion;
+  String? name;
+  String? isoCountry;
 
   factory Region.fromJson(Map<String, dynamic> json) => Region(
         isoRegion: json["iso_region"],

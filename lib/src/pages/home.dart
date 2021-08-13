@@ -1,5 +1,5 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:traveling/src/models/promotion_model.dart';
 import 'package:traveling/src/models/region_model.dart';
 import 'package:traveling/src/models/reservationTravel_model.dart';
@@ -7,7 +7,7 @@ import 'package:traveling/src/providers/PromotionProvider.dart';
 import 'package:traveling/src/providers/TravelProvider.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
 
 class Background extends StatelessWidget {
   const Background({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -47,7 +47,7 @@ class Background extends StatelessWidget {
 
 class Details extends StatelessWidget {
   Details({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -73,7 +73,7 @@ class Details extends StatelessWidget {
 }
 
 class OfferSwiper extends StatelessWidget {
-  OfferSwiper({Key key}) : super(key: key);
+  OfferSwiper({Key? key}) : super(key: key);
 
   final PromotionProvider promotionProvider = new PromotionProvider();
 
@@ -84,7 +84,7 @@ class OfferSwiper extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<List<Promotion>> snapshot) {
         if (snapshot.hasData) {
           final promotions = snapshot.data;
-          return (promotions.length == 0)
+          return (promotions!.length == 0)
               ? Container(
                   width: MediaQuery.of(context).size.width * 2 / 3,
                   height: MediaQuery.of(context).size.height * 2 / 5,
@@ -112,7 +112,7 @@ class OfferSwiper extends StatelessWidget {
                               alignment: Alignment.bottomCenter,
                               child: Image.asset('assets/' +
                                   promotions[index]
-                                      .llegada
+                                      .llegada!
                                       .toLowerCase()
                                       .replaceAll(new RegExp(' '), '_')
                                       .replaceAll(new RegExp(','), '') +
@@ -133,7 +133,7 @@ class OfferSwiper extends StatelessWidget {
                                     ),
                                     Text(
                                       promotions[index]
-                                              .salida
+                                              .salida!
                                               .replaceAll(' Department', '') +
                                           ' -',
                                       style: TextStyle(
@@ -143,7 +143,7 @@ class OfferSwiper extends StatelessWidget {
                                     ),
                                     Text(
                                       promotions[index]
-                                          .llegada
+                                          .llegada!
                                           .replaceAll(' Department', ''),
                                       style: TextStyle(
                                           fontSize: 20,
@@ -160,10 +160,11 @@ class OfferSwiper extends StatelessWidget {
                                     ),
                                     Text(
                                       _getDateTime(
-                                              promotions[index].fechaInicio) +
+                                              promotions[index].fechaInicio ??
+                                                  '') +
                                           ' - ' +
                                           _getDateTime(
-                                              promotions[index].fechaFin),
+                                              promotions[index].fechaFin ?? ''),
                                       style: TextStyle(
                                           fontSize: 13,
                                           color: Color.fromRGBO(6, 6, 6, 0.4),
@@ -259,19 +260,19 @@ class OfferSwiper extends StatelessWidget {
 }
 
 class ReservationSwiper extends StatelessWidget {
-  ReservationSwiper({Key key}) : super(key: key);
+  ReservationSwiper({Key? key}) : super(key: key);
 
   final TravelProvider travelProvider = new TravelProvider();
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: travelProvider.getTravels(),
+      future: travelProvider.getTravels(context),
       builder: (BuildContext context,
           AsyncSnapshot<List<ReservationTravel>> snapshot) {
         if (snapshot.hasData) {
           final travels = snapshot.data;
-          return (travels.length == 0)
+          return (travels!.length == 0)
               ? Container(
                   width: MediaQuery.of(context).size.width * 7 / 8,
                   height: MediaQuery.of(context).size.height * 4 / 11,
@@ -316,8 +317,9 @@ class ReservationSwiper extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(12)),
                                   child: Text(
                                     travels[index]
-                                        .itinerarios[0]
-                                        .salidaIataCodigo,
+                                            .itinerarios![0]
+                                            .salidaIataCodigo ??
+                                        '',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w600),
@@ -334,8 +336,9 @@ class ReservationSwiper extends StatelessWidget {
                                       ),
                                       Text(
                                         _getDuration(travels[index]
-                                            .itinerarios[0]
-                                            .duracion),
+                                                .itinerarios![0]
+                                                .duracion ??
+                                            ''),
                                         style: TextStyle(
                                             fontSize: 20,
                                             color: Color.fromRGBO(6, 6, 6, 1),
@@ -356,8 +359,9 @@ class ReservationSwiper extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(12)),
                                   child: Text(
                                     travels[index]
-                                        .itinerarios[0]
-                                        .llegadaIataCodigo,
+                                            .itinerarios![0]
+                                            .llegadaIataCodigo ??
+                                        '',
                                     style: TextStyle(
                                         color:
                                             Color.fromRGBO(135, 134, 210, 0.9),
@@ -373,8 +377,9 @@ class ReservationSwiper extends StatelessWidget {
                               children: <Widget>[
                                 Text(
                                   _getDateTime(travels[index]
-                                      .itinerarios[0]
-                                      .fechaSalida),
+                                          .itinerarios![0]
+                                          .fechaSalida ??
+                                      ''),
                                   style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700),
@@ -382,8 +387,9 @@ class ReservationSwiper extends StatelessWidget {
                                 Expanded(child: Container()),
                                 Text(
                                   _getDateTime(travels[index]
-                                      .itinerarios[0]
-                                      .fechaLlegada),
+                                          .itinerarios![0]
+                                          .fechaLlegada ??
+                                      ''),
                                   style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700),
@@ -410,7 +416,7 @@ class ReservationSwiper extends StatelessWidget {
                                       color: Color.fromRGBO(210, 155, 134, 0.9),
                                       borderRadius: BorderRadius.circular(14)),
                                   child: Text(
-                                    'BOB ' + travels[index].precio,
+                                    'BOB ' + (travels[index].precio ?? ''),
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold),

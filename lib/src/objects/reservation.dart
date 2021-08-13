@@ -14,18 +14,18 @@ class Reservation {
   bool isExpanded;
 
   Reservation({
-    this.from,
-    this.to,
-    this.departure,
-    this.destination,
-    this.time,
-    this.departureDate,
-    this.destinationDate,
-    this.departureHour,
-    this.destinationHour,
-    this.price,
-    this.flight,
-    this.typeClass,
-    this.isExpanded,
+    required this.from,
+    required this.to,
+    required this.departure,
+    required this.destination,
+    required this.time,
+    required this.departureDate,
+    required this.destinationDate,
+    required this.departureHour,
+    required this.destinationHour,
+    required this.price,
+    required this.flight,
+    required this.typeClass,
+    required this.isExpanded,
   });
 }

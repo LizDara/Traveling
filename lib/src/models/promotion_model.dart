@@ -20,16 +20,16 @@ class Promotion {
     this.llegadaIsoCodigo,
   });
 
-  int id;
-  String fechaInicio;
-  String fechaFin;
-  int descuento;
-  String salida;
-  String salidaIataCodigo;
-  String llegada;
-  String llegadaIataCodigo;
-  String salidaIsoCodigo;
-  String llegadaIsoCodigo;
+  int? id;
+  String? fechaInicio;
+  String? fechaFin;
+  int? descuento;
+  String? salida;
+  String? salidaIataCodigo;
+  String? llegada;
+  String? llegadaIataCodigo;
+  String? salidaIsoCodigo;
+  String? llegadaIsoCodigo;
 
   factory Promotion.fromJson(Map<String, dynamic> json) => Promotion(
         id: json["id"],

@@ -13,8 +13,8 @@ class ConfirmOffer {
     this.dictionaries,
   });
 
-  Data data;
-  Dictionaries dictionaries;
+  Data? data;
+  Dictionaries? dictionaries;
 
   factory ConfirmOffer.fromJson(Map<String, dynamic> json) => ConfirmOffer(
         data: Data.fromJson(json["data"]),
@@ -22,8 +22,8 @@ class ConfirmOffer {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data.toJson(),
-        "dictionaries": dictionaries.toJson(),
+        "data": data!.toJson(),
+        "dictionaries": dictionaries!.toJson(),
       };
 }
 
@@ -32,7 +32,7 @@ class Dictionaries {
     this.locations,
   });
 
-  Map<String, Location> locations;
+  Map<String, Location>? locations;
 
   factory Dictionaries.fromJson(Map<String, dynamic> json) => Dictionaries(
         locations: Map.from(json["locations"])
@@ -40,7 +40,7 @@ class Dictionaries {
       );
 
   Map<String, dynamic> toJson() => {
-        "locations": Map.from(locations)
+        "locations": Map.from(locations!)
             .map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
       };
 }
@@ -51,8 +51,8 @@ class Location {
     this.countryCode,
   });
 
-  String cityCode;
-  String countryCode;
+  String? cityCode;
+  String? countryCode;
 
   factory Location.fromJson(Map<String, dynamic> json) => Location(
         cityCode: json["cityCode"],
