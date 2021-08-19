@@ -11,11 +11,9 @@ class TravelProvider {
   Future<List<ReservationTravel>> getTravels(BuildContext context) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final accessToken = await userProvider.readAccessToken();
-    print('TOKEN: ' + accessToken);
     final response = await http.get(Uri.parse('$baseUrl/listar-reservas/'),
         headers: {'Authorization': 'Bearer ' + accessToken});
 
-    print(response.body);
     if (response.statusCode == 200) {
       final travels = reservationTravelFromJson(response.body);
       return travels;
@@ -32,5 +30,11 @@ class TravelProvider {
       return true;
     }
     return false;
+  }
+
+  Future<void> sendPhoneToken(String token) async {
+    final data = {"token": token};
+    final response = await http.post(Uri.parse('$baseUrl/obtener-codigo/'),
+        body: json.encode(data));
   }
 }

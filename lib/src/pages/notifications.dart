@@ -11,8 +11,6 @@ class NotificationsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final data =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
-    print('Ida Vuelta: ' + data["ida_vuelta"]);
-    print('Numero viajeros: ' + data["numero_viajeros"]);
     final Notify notification = new Notify(
         fechaSalida: data["fecha_salida"],
         fechaLlegada: data["fecha_llegada"],
@@ -127,16 +125,16 @@ class _NotificationsState extends State<Notifications> {
                                 widget.notification.segmentoSalidaHora ?? '') +
                             ' tiene una probabilidad de ' +
                             widget.notification.menos30Minutos!
-                                .substring(2, 2) +
+                                .substring(2, 4) +
                             '% de ser retrasado menos de 30 min, ' +
                             widget.notification.entre30Y60Minutos!
-                                .substring(2, 2) +
+                                .substring(2, 4) +
                             '% de ser retrasado entre 30 y 60 min, ' +
                             widget.notification.entre60MinutosY120Minutos!
-                                .substring(2, 2) +
+                                .substring(2, 4) +
                             '% de ser retrasado entre 60 y 120 min. Además la probabilidad de que sea cancelado es un ' +
                             widget.notification.mas60MinutosOCancelado!
-                                .substring(2, 2) +
+                                .substring(2, 4) +
                             '%.',
                         style: TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w700),
