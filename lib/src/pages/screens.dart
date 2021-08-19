@@ -18,7 +18,6 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> pageList = <Widget>[
     HomePage(),
     SearchPage(),
-    NotificationsPage(),
     TravelsPage(),
     ProfilePage()
   ];
@@ -58,13 +57,6 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.search),
             title: Text(
               'Viajar',
-              style: TextStyle(fontSize: 10),
-            ),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            title: Text(
-              'Notificación',
               style: TextStyle(fontSize: 10),
             ),
           ),

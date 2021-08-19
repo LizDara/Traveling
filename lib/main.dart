@@ -29,7 +29,33 @@ class AppState extends StatelessWidget {
   }
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> navigatorKey =
+      new GlobalKey<NavigatorState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    PushNotificationService.messageStream.listen((data) async {
+      final existTokens = await userProvider.existToken();
+      if (existTokens) {
+        navigatorKey.currentState
+            ?.pushReplacementNamed('notifications', arguments: data);
+      } else {
+        navigatorKey.currentState
+            ?.pushReplacementNamed('signin', arguments: data);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -44,6 +70,7 @@ class MyApp extends StatelessWidget {
         const Locale('es', 'ES'),
       ],
       theme: _myTheme(),
+      navigatorKey: navigatorKey,
       initialRoute: 'welcome',
       routes: getApplicationRoutes(),
     );

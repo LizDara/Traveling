@@ -67,4 +67,10 @@ class UserProvider extends ChangeNotifier {
     String refreshToken = await storage.read(key: 'refresh_token') ?? '';
     return [accessToken, refreshToken];
   }
+
+  Future<bool> existToken() async {
+    final accessToken = await storage.read(key: 'access_token') ?? '';
+    final refreshToken = await storage.read(key: 'refresh_token') ?? '';
+    return (accessToken != '' && refreshToken != '');
+  }
 }

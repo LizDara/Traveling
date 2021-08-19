@@ -131,21 +131,27 @@ class Background extends StatelessWidget {
   Widget _createFullName(BuildContext context) {
     return Row(
       children: <Widget>[
-        Text(
-          departure.name!.replaceAll(new RegExp(r' Department'), ''),
-          style: TextStyle(
-            color: Colors.white70,
-            fontWeight: FontWeight.bold,
+        Container(
+          child: Text(
+            departure.name!.replaceAll(new RegExp(r' Department'), ''),
+            style: TextStyle(
+              color: Colors.white70,
+              fontWeight: FontWeight.bold,
+              fontSize: 11,
+            ),
           ),
         ),
         Expanded(
           child: Container(),
         ),
-        Text(
-          destination.name!.replaceAll(new RegExp(r' Department'), ''),
-          style: TextStyle(
-            color: Colors.white70,
-            fontWeight: FontWeight.bold,
+        Container(
+          child: Text(
+            destination.name!.replaceAll(new RegExp(r' Department'), ''),
+            style: TextStyle(
+              color: Colors.white70,
+              fontWeight: FontWeight.bold,
+              fontSize: 11,
+            ),
           ),
         )
       ],

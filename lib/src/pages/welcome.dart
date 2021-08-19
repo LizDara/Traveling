@@ -17,7 +17,7 @@ class WelcomePage extends StatelessWidget {
               children: <Widget>[
                 Welcome(),
                 SizedBox(
-                  height: 25,
+                  height: 20,
                 ),
                 GetStarted()
               ],
@@ -120,7 +120,7 @@ class GetStarted extends StatelessWidget {
       children: <Widget>[
         _createTitle(),
         SizedBox(
-          height: 10,
+          height: 6,
         ),
         _createButton(context),
       ],

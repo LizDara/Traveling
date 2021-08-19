@@ -90,7 +90,7 @@ class OfferSwiper extends StatelessWidget {
                   height: MediaQuery.of(context).size.height * 2 / 5,
                   child: Center(
                     child: Text(
-                      'No hay Ofertas.',
+                      'No hay Promociones.',
                       style: TextStyle(color: Colors.black54, fontSize: 16),
                     ),
                   ),

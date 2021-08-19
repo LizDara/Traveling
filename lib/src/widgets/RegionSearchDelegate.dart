@@ -59,7 +59,6 @@ class RegionSearchDelegate extends SearchDelegate {
               title: Text(names[0]),
               subtitle: Text(names[1]),
               onTap: () {
-                print(region.name);
                 close(context, region);
               },
             );

@@ -8,12 +8,13 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final data = ModalRoute.of(context)?.settings.arguments;
     return Scaffold(
       key: scaffoldKey,
       body: Stack(
         children: <Widget>[
           Background(),
-          FormSignIn(scaffoldKey),
+          FormSignIn(scaffoldKey, data),
         ],
       ),
     );
@@ -71,8 +72,9 @@ class Background extends StatelessWidget {
 }
 
 class FormSignIn extends StatefulWidget {
-  FormSignIn(this.scaffoldKey);
+  FormSignIn(this.scaffoldKey, this.data);
   final scaffoldKey;
+  final data;
 
   @override
   _FormSignInState createState() => _FormSignInState();
@@ -190,7 +192,6 @@ class _FormSignInState extends State<FormSignIn> {
               color: Color.fromRGBO(6, 6, 6, 1),
               textColor: Colors.white,
               onPressed: () {
-                print('ON PRESSED LOGIN');
                 if (!formKey.currentState!.validate()) return;
                 formKey.currentState!.save();
                 _login(context);
@@ -204,11 +205,14 @@ class _FormSignInState extends State<FormSignIn> {
 
   _login(BuildContext context) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    print(user.correoElectronico);
-    print(user.contrasena);
     final resultLogin = await userProvider.login(user);
     if (resultLogin) {
-      Navigator.pushReplacementNamed(context, 'main');
+      if (widget.data != null) {
+        Navigator.pushReplacementNamed(context, 'notifications',
+            arguments: widget.data);
+      } else {
+        Navigator.pushReplacementNamed(context, 'main');
+      }
     } else {
       _showMessage('Correo o contraseña incorrectos.');
     }
@@ -220,14 +224,14 @@ class _FormSignInState extends State<FormSignIn> {
       children: <Widget>[
         Text(
           "No tienes una cuenta?",
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 14),
         ),
         FlatButton(
           onPressed: () => Navigator.pushReplacementNamed(context, 'signup'),
           child: Text(
             'Regístrate',
             style:
-                TextStyle(fontSize: 16, decoration: TextDecoration.underline),
+                TextStyle(fontSize: 14, decoration: TextDecoration.underline),
           ),
         )
       ],

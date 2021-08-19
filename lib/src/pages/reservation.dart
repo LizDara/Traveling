@@ -113,11 +113,11 @@ class _FormReservationState extends State<FormReservation> {
       children: <Widget>[
         Text(
           'Encuentra',
-          style: TextStyle(fontSize: 44, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
         ),
         Text(
           'tu vuelo aquí',
-          style: TextStyle(fontSize: 44, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
         )
       ],
     );
